@@ -1,10 +1,7 @@
-/*------------------------------------------------------------------------------
-#
-#    This file is part of the D Lang Helper library and licensed under the
-#    GPL version 3 or greater. See the COPYRIGHT file for copyright information.
-#    This project is hosted at http://launchpad.net/dlanghelper .
-#
-#-----------------------------------------------------------------------------*/
+// Copyright (c) 2017 Matthew Brennan Jones <matthew.brennan.jones@gmail.com>
+// Boost Software License - Version 1.0
+// Behavior Driven Development for the D programming language
+// https://github.com/workhorsy/BDD
 
 /++
  <a href="$(VCS_URL):/src/dlang_helper_bdd.d">View Source</a>
