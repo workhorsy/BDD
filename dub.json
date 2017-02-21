@@ -7,5 +7,6 @@
 	"homepage": "https://github.com/workhorsy/BDD",
 	"copyright": "Copyright (c) 2017 Matthew Brennan Jones",
 	"license": "BSL-1.0",
-	"targetType": "library"
+	"targetType": "library",
+	"importPaths": ["source/"],
 }
