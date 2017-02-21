@@ -9,7 +9,7 @@
 	"license": "BSL-1.0",
 	"importPaths": ["source/"],
 
-	"targetName": "BDD",
+	"targetName": "bdd",
 	"targetType": "staticLibrary",
 	"targetPath": "lib",
 }
