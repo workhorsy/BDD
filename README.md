@@ -1,2 +1,2 @@
 # BDD
-Behavior Driven Development for D
+Behavior Driven Development for the D programming language
