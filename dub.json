@@ -1,0 +1,11 @@
+{
+	"name": "bdd",
+	"description": "Behavior Driven Development for the D programming language",
+	"authors": [
+		"Matthew Brennan Jones <matthew.brennan.jones@gmail.com>",
+	],
+	"homepage": "https://github.com/workhorsy/BDD",
+	"copyright": "Copyright (c) 2017 Matthew Brennan Jones",
+	"license": "BSL-1.0",
+	"targetType": "library"
+}
