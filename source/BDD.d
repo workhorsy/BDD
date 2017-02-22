@@ -547,7 +547,7 @@ Example:
 ----
 	describe("example_library#thing_to_test",
 		it("Should NOT fail", delegate() {
-			assert(true);
+			// code here
 		})
 	);
 ----
@@ -584,10 +584,10 @@ Example:
 int a = 4;
 describe("example_library#a",
 	it("Should equal 4", delegate() {
-		assert(a == 4);
+		a.should_equal(4);
 	}),
 	it("Should Not equal 5", delegate() {
-		assert(a != 5);
+		a.should_not_equal(5);
 	})
 );
 ----
