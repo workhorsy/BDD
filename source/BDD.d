@@ -444,6 +444,16 @@ should_throw(delegate() {
 should_throw(delegate() {
 	throw new Exception("boom!");
 });
+
+// Will thow an exception like "Exception@test/example.d(7): Exception was not thrown. Expected: boom!"
+should_throw(delegate() {
+
+}, "boom!");
+
+// Will thow an exception like "Exception@test/example.d(7): Exception was not thrown. Expected one.
+should_throw(delegate() {
+
+});
 ----
 +/
 void should_throw(void delegate() cb, string message=null, string file=__FILE__, size_t line=__LINE__) {
