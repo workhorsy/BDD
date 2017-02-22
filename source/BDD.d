@@ -4,9 +4,37 @@
 // https://github.com/workhorsy/BDD
 
 /++
- Source code:
- $(LINK2 https://github.com/workhorsy/BDD/blob/master/source/BDD.d, "https://github.com/workhorsy/BDD/blob/master/source/BDD.d")
- +/
+Behavior Driven Development for the D programming language
+
+Home page:
+$(LINK https://github.com/workhorsy/BDD)
+
+License:
+Boost Software License - Version 1.0
+
+Example:
+----
+int add(int a, int b) {
+	return a + b;
+}
+
+unittest {
+	describe("math#add",
+		it("Should add positive numbers", delegate() {
+			add(5, 7).should_equal(12);
+		}),
+		it("Should add negative numbers", delegate() {
+			add(5, -7).should_equal(-2);
+		})
+	);
+}
+
+// Prints the results of the tests
+int main() {
+	return Test.print_results();
+}
+----
++/
 
 
 module BDD;
