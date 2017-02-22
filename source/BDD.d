@@ -191,8 +191,9 @@ z.should_not_be_null();
 +/
 void should_not_be_null(T)(T a, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a is null) {
-		if (! message)
+		if (! message) {
 			message = "expected to NOT be <null>.";
+		}
 		throw new core.exception.AssertError(message, file, line);
 	}
 }
