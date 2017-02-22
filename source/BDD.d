@@ -64,10 +64,6 @@ Example:
 // Will throw an exception like "AssertError@example.d(6): <3> expected to equal <5>."
 int z = 3;
 z.should_equal(5);
-
-// Will require you to fill in the message, unless you want an empty message.
-z = 3;
-assert(z == 5, "3 is expected to equal 5");
 ----
 +/
 public void should_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
@@ -108,10 +104,6 @@ Example:
 // Will throw an exception like "AssertError@example.d(6): <3> expected to NOT equal <3>."
 int z = 3;
 z.should_not_equal(3);
-
-// Will require you to fill in the message, unless you want an empty message.
-z = 3;
-assert(z != 3, "3 is expected to NOT equal 3");
 ----
 +/
 public void should_not_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
