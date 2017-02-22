@@ -581,7 +581,6 @@ void describe(TestPair...)(string describe_message, TestPair pairs) {
 		} catch (core.exception.Error err) {
 			add_fail(describe_message, pair, err);
 		} catch (core.exception.Exception err) {
-			//writeln(":(");
 			add_fail(describe_message, pair, err);
 		}
 	}
