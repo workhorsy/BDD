@@ -503,6 +503,25 @@ void after_it(void delegate() cb) {
 	_after_it = cb;
 }
 
+
+/++
+Prints the results of all the tests. Returns 0 if all tests pass, or 1 if any fail.
+
+Example:
+----
+	BDD.print_results();
+----
+
+Output:
+----
+Unit Test Results:
+4 total, 2 successful, 2 failed
+math#add
+- "5 + 7 = 12: <12> expected to equal <123>." broken_math.d(2)
+math#subtract
+- "5 - 7 = -2: <-2> expected to equal <456>." broken_math.d(6)
+----
++/
 int print_results() {
 	stdout.writeln("Unit Test Results:");
 	stdout.writefln("%d total, %d successful, %d failed", _success_count + _fail_count, _success_count, _fail_count);
