@@ -495,27 +495,6 @@ unittest {
 	);
 }
 
-private string[][string] _fail_messages;
-private ulong _fail_count;
-private ulong _success_count;
-private void delegate() _before_it;
-private void delegate() _after_it;
-
-private struct TestPair {
-	string it_message;
-	void delegate() func;
-}
-
-private void add_success() {
-	_success_count++;
-}
-
-// Throwable
-private void add_fail(string describe_message, TestPair pair, Throwable err) {
-	_fail_messages[describe_message] ~= "\"" ~ pair.it_message ~ ": " ~ err.msg ~ "\" " ~ err.file ~ "(" ~ err.line.to!string() ~ ")";
-	_fail_count++;
-}
-
 void before_it(void delegate() cb) {
 	_before_it = cb;
 }
@@ -601,6 +580,26 @@ TestPair it(string message, void delegate() func) {
 
 	return retval;
 }
+
+private struct TestPair {
+	string it_message;
+	void delegate() func;
+}
+
+private void add_success() {
+	_success_count++;
+}
+
+private void add_fail(string describe_message, TestPair pair, Throwable err) {
+	_fail_messages[describe_message] ~= "\"" ~ pair.it_message ~ ": " ~ err.msg ~ "\" " ~ err.file ~ "(" ~ err.line.to!string() ~ ")";
+	_fail_count++;
+}
+
+private string[][string] _fail_messages;
+private ulong _fail_count;
+private ulong _success_count;
+private void delegate() _before_it;
+private void delegate() _after_it;
 
 /*
 	TODO:
