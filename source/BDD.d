@@ -626,3 +626,14 @@ public TestPair it(string message, void delegate() func) {
 
 	return retval;
 }
+
+/*
+	TODO:
+	* fix spacing before if, catch, et cetera
+	* Add brackets around if, foreach, et cetera
+	* Change multiple catch Error, and Exception to one catch Throwble
+	* Make indentation in docs use 4 space sized tabs
+	* Change naming convention to proper D style. EG: should_equal to ShouldEqual?
+	* Removed extra public and private
+	* Change Test.print_results to BDD.print_results
+*/
