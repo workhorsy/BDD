@@ -435,11 +435,12 @@ be tested, if it is null.
 
 Example:
 ----
+// Makes sure it thows with the message "boom!"
 should_throw(delegate() {
 	throw new Exception("boom!");
 }, "boom!");
 
-// Or without testing the message
+// Makes sure it throws, but does not check the message
 should_throw(delegate() {
 	throw new Exception("boom!");
 });
@@ -554,19 +555,11 @@ Params:
 
 Example:
 ----
-// Has one test that should pass
-unittest {
 	describe("example_library#thing_to_test",
 		it("Should NOT fail", delegate() {
 			assert(true);
 		})
 	);
-}
-
-// Prints the results of the tests
-int main() {
-	return BDD.print_results();
-}
 ----
 +/
 public void describe(TestPair...)(string describe_message, TestPair pairs) {
@@ -600,24 +593,15 @@ Params:
 
 Example:
 ----
-import BDD;
-
-unittest {
-	int a = 4;
-	describe("example_library#a",
-		it("Should equal 4", delegate() {
-			assert(a == 4);
-		}),
-		it("Should Not equal 5", delegate() {
-			assert(a != 5);
-		})
-	);
-}
-
-// Prints the results of the tests
-int main() {
-	return BDD.print_results();
-}
+int a = 4;
+describe("example_library#a",
+	it("Should equal 4", delegate() {
+		assert(a == 4);
+	}),
+	it("Should Not equal 5", delegate() {
+		assert(a != 5);
+	})
+);
 ----
 +/
 public TestPair it(string message, void delegate() func) {
