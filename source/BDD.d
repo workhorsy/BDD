@@ -68,8 +68,9 @@ z.should_equal(5);
 +/
 public void should_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a != b) {
-		if (!message)
+		if (!message) {
 			message = "<" ~ a.to!string ~ "> expected to equal <" ~ b.to!string ~ ">.";
+		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new core.exception.AssertError(message, file, line);
 	}
@@ -108,8 +109,9 @@ z.should_not_equal(3);
 +/
 public void should_not_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a == b) {
-		if (!message)
+		if (!message) {
 			message = "<" ~ a.to!string ~ "> expected to NOT equal <" ~ b.to!string ~ ">.";
+		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new core.exception.AssertError(message, file, line);
 	}
@@ -147,8 +149,9 @@ z.should_be_null();
 +/
 public void should_be_null(T)(T a, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a !is null) {
-		if (!message)
+		if (!message) {
 			message = "expected to be <null>.";
+		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new core.exception.AssertError(message, file, line);
 	}
@@ -229,8 +232,9 @@ public void should_be_in(T, U)(T value, U[] valid_values, string file=__FILE__, 
 	bool is_valid = false;
 
 	foreach (valid; valid_values) {
-		if (value == valid)
+		if (value == valid) {
 			is_valid = true;
+		}
 	}
 
 	if (!is_valid) {
@@ -272,8 +276,9 @@ Example:
 +/
 public void should_be_greater(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a <= b) {
-		if (!message)
+		if (!message) {
 			message = "<" ~ a.to!string ~ "> expected to be greater than <" ~ b.to!string ~ ">.";
+		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new core.exception.AssertError(message, file, line);
 	}
@@ -311,8 +316,9 @@ Example:
 +/
 public void should_be_less(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a >= b) {
-		if (!message)
+		if (!message) {
 			message = "<" ~ a.to!string ~ "> expected to be less than <" ~ b.to!string ~ ">.";
+		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new core.exception.AssertError(message, file, line);
 	}
@@ -350,8 +356,9 @@ Example:
 +/
 public void should_be_greater_or_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a < b) {
-		if (!message)
+		if (!message) {
 			message = "<" ~ a.to!string ~ "> expected to be greater or equal to <" ~ b.to!string ~ ">.";
+		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new core.exception.AssertError(message, file, line);
 	}
@@ -392,8 +399,9 @@ Example:
 +/
 public void should_be_less_or_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a > b) {
-		if (!message)
+		if (!message) {
 			message = "<" ~ a.to!string ~ "> expected to be less or equal to <" ~ b.to!string ~ ">.";
+		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new core.exception.AssertError(message, file, line);
 	}
@@ -444,12 +452,14 @@ public void should_throw(void delegate() cb, string message=null, string file=__
 		cb();
 	} catch (Exception ex) {
 		has_thrown = true;
-		if (message && message != ex.msg)
+		if (message && message != ex.msg) {
 			throw new Exception("Exception was thrown. But expected: " ~ message, file, line);
+		}
 	} catch (Error err) {
 		has_thrown = true;
-		if (message && message != err.msg)
+		if (message && message != err.msg) {
 			throw new Exception("Error was thrown. But expected: " ~ message, file, line);
+		}
 	}
 
 	if (!has_thrown) {
@@ -557,11 +567,16 @@ Example:
 public void describe(TestPair...)(string describe_message, TestPair pairs) {
 	foreach (pair; pairs) {
 		try {
-			if (_before_it)
+			if (_before_it) {
 				_before_it();
+			}
+
 			pair.func();
-			if (_after_it)
+
+			if (_after_it) {
 				_after_it();
+			}
+
 			add_success();
 		} catch (core.exception.Error err) {
 			add_fail(describe_message, pair, err);
@@ -602,7 +617,6 @@ public TestPair it(string message, void delegate() func) {
 
 /*
 	TODO:
-	* Add brackets around if, foreach, et cetera
 	* Change multiple catch Error, and Exception to one catch Throwble
 	* Make indentation in docs use 4 space sized tabs
 	* Change naming convention to proper D style. EG: should_equal to ShouldEqual?
