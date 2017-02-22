@@ -43,7 +43,6 @@ module BDD;
 
 import std.array;
 import std.stdio;
-import std.conv;
 import std.string;
 import core.exception;
 
@@ -69,7 +68,7 @@ z.should_equal(5);
 void should_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a != b) {
 		if (! message) {
-			message = "<" ~ a.to!string ~ "> expected to equal <" ~ b.to!string ~ ">.";
+			message = "<%s> expected to equal <%s>.".format(a, b);
 		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new AssertError(message, file, line);
@@ -110,7 +109,7 @@ z.should_not_equal(3);
 void should_not_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a == b) {
 		if (! message) {
-			message = "<" ~ a.to!string ~ "> expected to NOT equal <" ~ b.to!string ~ ">.";
+			message = "<%s> expected to NOT equal <%s>.".format(a, b);
 		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new AssertError(message, file, line);
@@ -239,7 +238,7 @@ void should_be_in(T, U)(T value, U[] valid_values, string file=__FILE__, size_t 
 	}
 
 	if (! is_valid) {
-		string message = "<" ~ value.to!string ~ "> is not in <[" ~ valid_values.join(", ") ~ "]>.";
+		string message = "<%s> is not in <[%s]>.".format(value, valid_values.join(", "));
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new AssertError(message, file, line);
 	}
@@ -278,7 +277,7 @@ Example:
 void should_be_greater(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a <= b) {
 		if (! message) {
-			message = "<" ~ a.to!string ~ "> expected to be greater than <" ~ b.to!string ~ ">.";
+			message = "<%s> expected to be greater than <%s>.".format(a, b);
 		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new AssertError(message, file, line);
@@ -318,7 +317,7 @@ Example:
 void should_be_less(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a >= b) {
 		if (! message) {
-			message = "<" ~ a.to!string ~ "> expected to be less than <" ~ b.to!string ~ ">.";
+			message = "<%s> expected to be less than <%s>.".format(a, b);
 		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new AssertError(message, file, line);
@@ -358,7 +357,7 @@ Example:
 void should_be_greater_or_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a < b) {
 		if (! message) {
-			message = "<" ~ a.to!string ~ "> expected to be greater or equal to <" ~ b.to!string ~ ">.";
+			message = "<%s> expected to be greater or equal to <%s>.".format(a, b);
 		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new AssertError(message, file, line);
@@ -401,7 +400,7 @@ Example:
 void should_be_less_or_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a > b) {
 		if (! message) {
-			message = "<" ~ a.to!string ~ "> expected to be less or equal to <" ~ b.to!string ~ ">.";
+			message = "<%s> expected to be less or equal to <%s>.".format(a, b);
 		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new AssertError(message, file, line);
@@ -610,7 +609,7 @@ private void add_success() {
 }
 
 private void add_fail(string describe_message, TestPair pair, Throwable err) {
-	_fail_messages[describe_message] ~= "\"" ~ pair.it_message ~ ": " ~ err.msg ~ "\" " ~ err.file ~ "(" ~ err.line.to!string() ~ ")";
+	_fail_messages[describe_message] ~= `"%s: %s" %s(%s)`.format(pair.it_message, err.msg, err.file, err.line);
 	_fail_count++;
 }
 
@@ -624,5 +623,4 @@ private void delegate() _after_it;
 	TODO:
 	* Make indentation in docs use 4 space sized tabs
 	* Change naming convention to proper D style. EG: should_equal to ShouldEqual?
-	* Change string concatenation to string format.
 */
