@@ -67,7 +67,7 @@ should_throw(delegate() {
 	throw new Exception("boom!");
 });
 ----
- +/
++/
 public void should_throw(void delegate() cb, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	bool has_thrown = false;
 	try {
@@ -140,7 +140,7 @@ z.should_equal(5);
 z = 3;
 assert(z == 5, "3 is expected to equal 5");
 ----
- +/
++/
 public void should_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if(a != b) {
 		if(!message)
@@ -184,7 +184,7 @@ z.should_not_equal(3);
 z = 3;
 assert(z != 3, "3 is expected to NOT equal 3");
 ----
- +/
++/
 public void should_not_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if(a == b) {
 		if(!message)
@@ -223,7 +223,7 @@ Example:
 string z = "blah";
 z.should_be_null();
 ----
- +/
++/
 public void should_be_null(T)(T a, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if(a !is null) {
 		if(!message)
@@ -264,7 +264,7 @@ Example:
 string z = null;
 z.should_not_be_null();
 ----
- +/
++/
 public void should_not_be_null(T)(T a, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if(a is null) {
 		if(!message)
@@ -303,7 +303,7 @@ Example:
 // Will thow an exception like "AssertError@example.d(6): <Bobrick> is not in <[Tim, Al]>."
 "Bobrick".should_be_in(["Tim", "Al"]);
 ----
- +/
++/
 public void should_be_in(T, U)(T value, U[] valid_values, string file=__FILE__, size_t line=__LINE__) {
 	bool is_valid = false;
 
@@ -348,7 +348,7 @@ Example:
 // Will thow an exception like "AssertError@example.d(6): <5> expected to be greater than <10>."
 5.should_be_greater(10);
 ----
- +/
++/
 public void should_be_greater(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if(a <= b) {
 		if(!message)
@@ -387,7 +387,7 @@ Example:
 // Will thow an exception like "AssertError@example.d(6): <10> expected to be less than <5>."
 10.should_be_less(5);
 ----
- +/
++/
 public void should_be_less(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if(a >= b) {
 		if(!message)
@@ -426,7 +426,7 @@ Example:
 // Will thow an exception like "AssertError@example.d(6): <5> expected to be greater or equal to <10>."
 5.should_be_greater_or_equal(10);
 ----
- +/
++/
 public void should_be_greater_or_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if(a < b) {
 		if(!message)
@@ -468,7 +468,7 @@ Example:
 // Will thow an exception like "AssertError@example.d(6): <10> expected to be less or equal to <5>."
 10.should_be_less_or_equal(5);
 ----
- +/
++/
 public void should_be_less_or_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if(a > b) {
 		if(!message)
@@ -568,7 +568,7 @@ int main() {
 	return Test.print_results();
 }
 ----
- +/
++/
 public void describe(TestPair...)(string describe_message, TestPair pairs) {
 	string blah = null;
 	foreach(pair; pairs) {
@@ -617,7 +617,7 @@ int main() {
 	return Test.print_results();
 }
 ----
- +/
++/
 public TestPair it(string message, void delegate() func) {
 	TestPair retval;
 	retval.it_message = message;
