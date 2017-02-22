@@ -224,7 +224,7 @@ Params:
 
 Example:
 ----
-// Will thow an exception like "AssertError@example.d(6): <Bobrick> is not in <[Tim, Al]>."
+// Will throw an exception like "AssertError@example.d(6): <Bobrick> is not in <[Tim, Al]>."
 "Bobrick".should_be_in(["Tim", "Al"]);
 ----
 +/
@@ -270,7 +270,7 @@ Params:
 
 Example:
 ----
-// Will thow an exception like "AssertError@example.d(6): <5> expected to be greater than <10>."
+// Will throw an exception like "AssertError@example.d(6): <5> expected to be greater than <10>."
 5.should_be_greater(10);
 ----
 +/
@@ -310,7 +310,7 @@ Params:
 
 Example:
 ----
-// Will thow an exception like "AssertError@example.d(6): <10> expected to be less than <5>."
+// Will throw an exception like "AssertError@example.d(6): <10> expected to be less than <5>."
 10.should_be_less(5);
 ----
 +/
@@ -350,7 +350,7 @@ Params:
 
 Example:
 ----
-// Will thow an exception like "AssertError@example.d(6): <5> expected to be greater or equal to <10>."
+// Will throw an exception like "AssertError@example.d(6): <5> expected to be greater or equal to <10>."
 5.should_be_greater_or_equal(10);
 ----
 +/
@@ -393,7 +393,7 @@ Params:
 
 Example:
 ----
-// Will thow an exception like "AssertError@example.d(6): <10> expected to be less or equal to <5>."
+// Will throw an exception like "AssertError@example.d(6): <10> expected to be less or equal to <5>."
 10.should_be_less_or_equal(5);
 ----
 +/
@@ -435,7 +435,7 @@ be tested, if it is null.
 
 Example:
 ----
-// Makes sure it thows with the message "boom!"
+// Makes sure it throws with the message "boom!"
 should_throw(delegate() {
 	throw new Exception("boom!");
 }, "boom!");
@@ -445,12 +445,12 @@ should_throw(delegate() {
 	throw new Exception("boom!");
 });
 
-// Will thow an exception like "Exception@test/example.d(7): Exception was not thrown. Expected: boom!"
+// Will throw an exception like "Exception@test/example.d(7): Exception was not thrown. Expected: boom!"
 should_throw(delegate() {
 
 }, "boom!");
 
-// Will thow an exception like "Exception@test/example.d(7): Exception was not thrown. Expected one.
+// Will throw an exception like "Exception@test/example.d(7): Exception was not thrown. Expected one.
 should_throw(delegate() {
 
 });
