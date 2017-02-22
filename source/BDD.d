@@ -532,13 +532,13 @@ public static void after_it(void delegate() cb) {
 }
 
 public static int print_results() {
-	writeln("Unit Test Results:");
-	writefln("%d total, %d successful, %d failed", _success_count + _fail_count, _success_count, _fail_count);
+	stdout.writeln("Unit Test Results:");
+	stdout.writefln("%d total, %d successful, %d failed", _success_count + _fail_count, _success_count, _fail_count);
 
 	foreach(a, b; _fail_messages) {
-		writefln("%s", a);
+		stdout.writefln("%s", a);
 		foreach(c; b) {
-			writefln("- %s", c);
+			stdout.writefln("- %s", c);
 		}
 	}
 
