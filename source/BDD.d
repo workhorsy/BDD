@@ -66,7 +66,7 @@ int z = 3;
 z.should_equal(5);
 ----
 +/
-public void should_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
+void should_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a != b) {
 		if (!message) {
 			message = "<" ~ a.to!string ~ "> expected to equal <" ~ b.to!string ~ ">.";
@@ -107,7 +107,7 @@ int z = 3;
 z.should_not_equal(3);
 ----
 +/
-public void should_not_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
+void should_not_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a == b) {
 		if (!message) {
 			message = "<" ~ a.to!string ~ "> expected to NOT equal <" ~ b.to!string ~ ">.";
@@ -147,7 +147,7 @@ string z = "blah";
 z.should_be_null();
 ----
 +/
-public void should_be_null(T)(T a, string message=null, string file=__FILE__, size_t line=__LINE__) {
+void should_be_null(T)(T a, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a !is null) {
 		if (!message) {
 			message = "expected to be <null>.";
@@ -189,7 +189,7 @@ string z = null;
 z.should_not_be_null();
 ----
 +/
-public void should_not_be_null(T)(T a, string message=null, string file=__FILE__, size_t line=__LINE__) {
+void should_not_be_null(T)(T a, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a is null) {
 		if (!message)
 			message = "expected to NOT be <null>.";
@@ -228,7 +228,7 @@ Example:
 "Bobrick".should_be_in(["Tim", "Al"]);
 ----
 +/
-public void should_be_in(T, U)(T value, U[] valid_values, string file=__FILE__, size_t line=__LINE__) {
+void should_be_in(T, U)(T value, U[] valid_values, string file=__FILE__, size_t line=__LINE__) {
 	bool is_valid = false;
 
 	foreach (valid; valid_values) {
@@ -274,7 +274,7 @@ Example:
 5.should_be_greater(10);
 ----
 +/
-public void should_be_greater(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
+void should_be_greater(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a <= b) {
 		if (!message) {
 			message = "<" ~ a.to!string ~ "> expected to be greater than <" ~ b.to!string ~ ">.";
@@ -314,7 +314,7 @@ Example:
 10.should_be_less(5);
 ----
 +/
-public void should_be_less(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
+void should_be_less(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a >= b) {
 		if (!message) {
 			message = "<" ~ a.to!string ~ "> expected to be less than <" ~ b.to!string ~ ">.";
@@ -354,7 +354,7 @@ Example:
 5.should_be_greater_or_equal(10);
 ----
 +/
-public void should_be_greater_or_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
+void should_be_greater_or_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a < b) {
 		if (!message) {
 			message = "<" ~ a.to!string ~ "> expected to be greater or equal to <" ~ b.to!string ~ ">.";
@@ -397,7 +397,7 @@ Example:
 10.should_be_less_or_equal(5);
 ----
 +/
-public void should_be_less_or_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
+void should_be_less_or_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a > b) {
 		if (!message) {
 			message = "<" ~ a.to!string ~ "> expected to be less or equal to <" ~ b.to!string ~ ">.";
@@ -446,7 +446,7 @@ should_throw(delegate() {
 });
 ----
 +/
-public void should_throw(void delegate() cb, string message=null, string file=__FILE__, size_t line=__LINE__) {
+void should_throw(void delegate() cb, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	bool has_thrown = false;
 	try {
 		cb();
@@ -506,8 +506,8 @@ private void delegate() _before_it;
 private void delegate() _after_it;
 
 private struct TestPair {
-	public string it_message;
-	public void delegate() func;
+	string it_message;
+	void delegate() func;
 }
 
 private static void add_success() {
@@ -526,15 +526,15 @@ private static void add_fail(string describe_message, TestPair pair, core.except
 	_fail_count++;
 }
 
-public static void before_it(void delegate() cb) {
+static void before_it(void delegate() cb) {
 	_before_it = cb;
 }
 
-public static void after_it(void delegate() cb) {
+static void after_it(void delegate() cb) {
 	_after_it = cb;
 }
 
-public static int print_results() {
+static int print_results() {
 	stdout.writeln("Unit Test Results:");
 	stdout.writefln("%d total, %d successful, %d failed", _success_count + _fail_count, _success_count, _fail_count);
 
@@ -564,7 +564,7 @@ Example:
 	);
 ----
 +/
-public void describe(TestPair...)(string describe_message, TestPair pairs) {
+void describe(TestPair...)(string describe_message, TestPair pairs) {
 	foreach (pair; pairs) {
 		try {
 			if (_before_it) {
@@ -607,7 +607,7 @@ describe("example_library#a",
 );
 ----
 +/
-public TestPair it(string message, void delegate() func) {
+TestPair it(string message, void delegate() func) {
 	TestPair retval;
 	retval.it_message = message;
 	retval.func = func;
