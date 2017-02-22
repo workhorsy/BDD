@@ -555,19 +555,15 @@ Example:
 ----
 +/
 public void describe(TestPair...)(string describe_message, TestPair pairs) {
-	string blah = null;
 	foreach(pair; pairs) {
 		try {
-			//write("describe_message: " ~ describe_message ~ "#" ~ pair.it_message ~ " ... ");
 			if(_before_it)
 				_before_it();
 			pair.func();
 			if(_after_it)
 				_after_it();
-			//writeln(":)");
 			add_success();
 		} catch(core.exception.Error err) {
-			//writeln(":(");
 			add_fail(describe_message, pair, err);
 		} catch(core.exception.Exception err) {
 			//writeln(":(");
