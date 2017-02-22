@@ -510,31 +510,31 @@ private struct TestPair {
 	void delegate() func;
 }
 
-private static void add_success() {
+private void add_success() {
 	_success_count++;
 }
 
 // Error
-private static void add_fail(string describe_message, TestPair pair, core.exception.Error err) {
+private void add_fail(string describe_message, TestPair pair, core.exception.Error err) {
 	_fail_messages[describe_message] ~= "\"" ~ pair.it_message ~ ": " ~ err.msg ~ "\" " ~ err.file ~ "(" ~ err.line.to!string() ~ ")";
 	_fail_count++;
 }
 
 // Exception
-private static void add_fail(string describe_message, TestPair pair, core.exception.Exception err) {
+private void add_fail(string describe_message, TestPair pair, core.exception.Exception err) {
 	_fail_messages[describe_message] ~= "\"" ~ pair.it_message ~ ": " ~ err.msg ~ "\" " ~ err.file ~ "(" ~ err.line.to!string() ~ ")";
 	_fail_count++;
 }
 
-static void before_it(void delegate() cb) {
+void before_it(void delegate() cb) {
 	_before_it = cb;
 }
 
-static void after_it(void delegate() cb) {
+void after_it(void delegate() cb) {
 	_after_it = cb;
 }
 
-static int print_results() {
+int print_results() {
 	stdout.writeln("Unit Test Results:");
 	stdout.writefln("%d total, %d successful, %d failed", _success_count + _fail_count, _success_count, _fail_count);
 
@@ -620,7 +620,6 @@ TestPair it(string message, void delegate() func) {
 	* Change multiple catch Error, and Exception to one catch Throwble
 	* Make indentation in docs use 4 space sized tabs
 	* Change naming convention to proper D style. EG: should_equal to ShouldEqual?
-	* Removed extra public and private
 	* Remove asserts, as they may mislead people to not use should functions.
 	* Change string concatenation to string format.
 */
