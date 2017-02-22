@@ -451,15 +451,10 @@ void should_throw(void delegate() cb, string message=null, string file=__FILE__,
 	bool has_thrown = false;
 	try {
 		cb();
-	} catch (Exception ex) {
+	} catch (Throwable ex) {
 		has_thrown = true;
 		if (message && message != ex.msg) {
-			throw new Exception("Exception was thrown. But expected: " ~ message, file, line);
-		}
-	} catch (Error err) {
-		has_thrown = true;
-		if (message && message != err.msg) {
-			throw new Exception("Error was thrown. But expected: " ~ message, file, line);
+			throw new Exception("Throwable was thrown. But expected: " ~ message, file, line);
 		}
 	}
 
@@ -515,14 +510,8 @@ private void add_success() {
 	_success_count++;
 }
 
-// Error
-private void add_fail(string describe_message, TestPair pair, core.exception.Error err) {
-	_fail_messages[describe_message] ~= "\"" ~ pair.it_message ~ ": " ~ err.msg ~ "\" " ~ err.file ~ "(" ~ err.line.to!string() ~ ")";
-	_fail_count++;
-}
-
-// Exception
-private void add_fail(string describe_message, TestPair pair, core.exception.Exception err) {
+// Throwable
+private void add_fail(string describe_message, TestPair pair, Throwable err) {
 	_fail_messages[describe_message] ~= "\"" ~ pair.it_message ~ ": " ~ err.msg ~ "\" " ~ err.file ~ "(" ~ err.line.to!string() ~ ")";
 	_fail_count++;
 }
@@ -579,10 +568,8 @@ void describe(TestPair...)(string describe_message, TestPair pairs) {
 			}
 
 			add_success();
-		} catch (core.exception.Error err) {
-			add_fail(describe_message, pair, err);
-		} catch (core.exception.Exception err) {
-			add_fail(describe_message, pair, err);
+		} catch (Throwable ex) {
+			add_fail(describe_message, pair, ex);
 		}
 	}
 }
@@ -617,7 +604,6 @@ TestPair it(string message, void delegate() func) {
 
 /*
 	TODO:
-	* Change multiple catch Error, and Exception to one catch Throwble
 	* Make indentation in docs use 4 space sized tabs
 	* Change naming convention to proper D style. EG: should_equal to ShouldEqual?
 	* Remove asserts, as they may mislead people to not use should functions.
