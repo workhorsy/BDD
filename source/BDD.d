@@ -67,8 +67,8 @@ z.should_equal(5);
 ----
 +/
 public void should_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
-	if(a != b) {
-		if(!message)
+	if (a != b) {
+		if (!message)
 			message = "<" ~ a.to!string ~ "> expected to equal <" ~ b.to!string ~ ">.";
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new core.exception.AssertError(message, file, line);
@@ -107,8 +107,8 @@ z.should_not_equal(3);
 ----
 +/
 public void should_not_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
-	if(a == b) {
-		if(!message)
+	if (a == b) {
+		if (!message)
 			message = "<" ~ a.to!string ~ "> expected to NOT equal <" ~ b.to!string ~ ">.";
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new core.exception.AssertError(message, file, line);
@@ -146,8 +146,8 @@ z.should_be_null();
 ----
 +/
 public void should_be_null(T)(T a, string message=null, string file=__FILE__, size_t line=__LINE__) {
-	if(a !is null) {
-		if(!message)
+	if (a !is null) {
+		if (!message)
 			message = "expected to be <null>.";
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new core.exception.AssertError(message, file, line);
@@ -187,8 +187,8 @@ z.should_not_be_null();
 ----
 +/
 public void should_not_be_null(T)(T a, string message=null, string file=__FILE__, size_t line=__LINE__) {
-	if(a is null) {
-		if(!message)
+	if (a is null) {
+		if (!message)
 			message = "expected to NOT be <null>.";
 		throw new core.exception.AssertError(message, file, line);
 	}
@@ -228,12 +228,12 @@ Example:
 public void should_be_in(T, U)(T value, U[] valid_values, string file=__FILE__, size_t line=__LINE__) {
 	bool is_valid = false;
 
-	foreach(valid; valid_values) {
-		if(value == valid)
+	foreach (valid; valid_values) {
+		if (value == valid)
 			is_valid = true;
 	}
 
-	if(!is_valid) {
+	if (!is_valid) {
 		string message = "<" ~ value.to!string ~ "> is not in <[" ~ valid_values.join(", ") ~ "]>.";
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new core.exception.AssertError(message, file, line);
@@ -271,8 +271,8 @@ Example:
 ----
 +/
 public void should_be_greater(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
-	if(a <= b) {
-		if(!message)
+	if (a <= b) {
+		if (!message)
 			message = "<" ~ a.to!string ~ "> expected to be greater than <" ~ b.to!string ~ ">.";
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new core.exception.AssertError(message, file, line);
@@ -310,8 +310,8 @@ Example:
 ----
 +/
 public void should_be_less(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
-	if(a >= b) {
-		if(!message)
+	if (a >= b) {
+		if (!message)
 			message = "<" ~ a.to!string ~ "> expected to be less than <" ~ b.to!string ~ ">.";
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new core.exception.AssertError(message, file, line);
@@ -349,8 +349,8 @@ Example:
 ----
 +/
 public void should_be_greater_or_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
-	if(a < b) {
-		if(!message)
+	if (a < b) {
+		if (!message)
 			message = "<" ~ a.to!string ~ "> expected to be greater or equal to <" ~ b.to!string ~ ">.";
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new core.exception.AssertError(message, file, line);
@@ -391,8 +391,8 @@ Example:
 ----
 +/
 public void should_be_less_or_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
-	if(a > b) {
-		if(!message)
+	if (a > b) {
+		if (!message)
 			message = "<" ~ a.to!string ~ "> expected to be less or equal to <" ~ b.to!string ~ ">.";
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new core.exception.AssertError(message, file, line);
@@ -442,18 +442,18 @@ public void should_throw(void delegate() cb, string message=null, string file=__
 	bool has_thrown = false;
 	try {
 		cb();
-	} catch(Exception ex) {
+	} catch (Exception ex) {
 		has_thrown = true;
-		if(message && message != ex.msg)
+		if (message && message != ex.msg)
 			throw new Exception("Exception was thrown. But expected: " ~ message, file, line);
-	} catch(Error err) {
+	} catch (Error err) {
 		has_thrown = true;
-		if(message && message != err.msg)
+		if (message && message != err.msg)
 			throw new Exception("Error was thrown. But expected: " ~ message, file, line);
 	}
 
-	if(!has_thrown) {
-		if(message) {
+	if (!has_thrown) {
+		if (message) {
 			throw new Exception("Exception was not thrown. Expected: " ~ message, file, line);
 		} else {
 			throw new Exception("Exception was not thrown. Expected one.", file, line);
@@ -479,7 +479,7 @@ unittest {
 				should_throw(delegate() {
 					// Does not throw
 				});
-			} catch(Exception exception) {
+			} catch (Exception exception) {
 				ex = exception;
 			}
 
@@ -528,9 +528,9 @@ public static int print_results() {
 	stdout.writeln("Unit Test Results:");
 	stdout.writefln("%d total, %d successful, %d failed", _success_count + _fail_count, _success_count, _fail_count);
 
-	foreach(a, b; _fail_messages) {
+	foreach (a, b; _fail_messages) {
 		stdout.writefln("%s", a);
-		foreach(c; b) {
+		foreach (c; b) {
 			stdout.writefln("- %s", c);
 		}
 	}
@@ -555,17 +555,17 @@ Example:
 ----
 +/
 public void describe(TestPair...)(string describe_message, TestPair pairs) {
-	foreach(pair; pairs) {
+	foreach (pair; pairs) {
 		try {
-			if(_before_it)
+			if (_before_it)
 				_before_it();
 			pair.func();
-			if(_after_it)
+			if (_after_it)
 				_after_it();
 			add_success();
-		} catch(core.exception.Error err) {
+		} catch (core.exception.Error err) {
 			add_fail(describe_message, pair, err);
-		} catch(core.exception.Exception err) {
+		} catch (core.exception.Exception err) {
 			//writeln(":(");
 			add_fail(describe_message, pair, err);
 		}
@@ -602,7 +602,6 @@ public TestPair it(string message, void delegate() func) {
 
 /*
 	TODO:
-	* fix spacing before if, catch, et cetera
 	* Add brackets around if, foreach, et cetera
 	* Change multiple catch Error, and Exception to one catch Throwble
 	* Make indentation in docs use 4 space sized tabs
