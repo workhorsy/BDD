@@ -1,8 +1,7 @@
 
 
-
+import BDD;
 
 int main() {
-	import BDD;
-	return Test.print_results();
+	return BDD.print_results();
 }

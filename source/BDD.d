@@ -14,6 +14,8 @@ Boost Software License - Version 1.0
 
 Example:
 ----
+import BDD;
+
 int add(int a, int b) {
 	return a + b;
 }
@@ -31,7 +33,7 @@ unittest {
 
 // Prints the results of the tests
 int main() {
-	return Test.print_results();
+	return BDD.print_results();
 }
 ----
 +/
@@ -523,20 +525,6 @@ public class Test {
 		_fail_count++;
 	}
 
-	public static int print_results() {
-		writeln("Unit Test Results:");
-		writefln("%d total, %d successful, %d failed", _success_count + _fail_count, _success_count, _fail_count);
-
-		foreach(a, b; _fail_messages) {
-			writefln("%s", a);
-			foreach(c; b) {
-				writefln("- %s", c);
-			}
-		}
-
-		return _fail_count > 0;
-	}
-
 	public static void before_it(void delegate() cb) {
 		_before_it = cb;
 	}
@@ -544,6 +532,20 @@ public class Test {
 	public static void after_it(void delegate() cb) {
 		_after_it = cb;
 	}
+}
+
+public static int print_results() {
+	writeln("Unit Test Results:");
+	writefln("%d total, %d successful, %d failed", Test._success_count + Test._fail_count, Test._success_count, Test._fail_count);
+
+	foreach(a, b; Test._fail_messages) {
+		writefln("%s", a);
+		foreach(c; b) {
+			writefln("- %s", c);
+		}
+	}
+
+	return Test._fail_count > 0;
 }
 
 /++
@@ -566,7 +568,7 @@ unittest {
 
 // Prints the results of the tests
 int main() {
-	return Test.print_results();
+	return BDD.print_results();
 }
 ----
 +/
@@ -601,6 +603,8 @@ Params:
 
 Example:
 ----
+import BDD;
+
 unittest {
 	int a = 4;
 	describe("example_library#a",
@@ -615,7 +619,7 @@ unittest {
 
 // Prints the results of the tests
 int main() {
-	return Test.print_results();
+	return BDD.print_results();
 }
 ----
 +/
@@ -635,5 +639,4 @@ public TestPair it(string message, void delegate() func) {
 	* Make indentation in docs use 4 space sized tabs
 	* Change naming convention to proper D style. EG: should_equal to ShouldEqual?
 	* Removed extra public and private
-	* Change Test.print_results to BDD.print_results
 */
