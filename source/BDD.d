@@ -536,7 +536,7 @@ int print_results() {
 }
 
 /++
-Used for writing the 'describe' part of a Behavior Driven Development test.
+The message is usually the name of the thing being tested.
 
 Params:
  describe_message = The thing that is being described.
@@ -572,7 +572,7 @@ void describe(TestPair...)(string describe_message, TestPair pairs) {
 }
 
 /++
-Used for writing the 'it' part of a Behavior Driven Development test.
+The message should describe what the test should do.
 
 Params:
  message = The message to print when the test fails.
