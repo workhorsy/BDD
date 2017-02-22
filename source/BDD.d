@@ -68,7 +68,7 @@ z.should_equal(5);
 +/
 void should_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a != b) {
-		if (!message) {
+		if (! message) {
 			message = "<" ~ a.to!string ~ "> expected to equal <" ~ b.to!string ~ ">.";
 		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
@@ -109,7 +109,7 @@ z.should_not_equal(3);
 +/
 void should_not_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a == b) {
-		if (!message) {
+		if (! message) {
 			message = "<" ~ a.to!string ~ "> expected to NOT equal <" ~ b.to!string ~ ">.";
 		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
@@ -149,7 +149,7 @@ z.should_be_null();
 +/
 void should_be_null(T)(T a, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a !is null) {
-		if (!message) {
+		if (! message) {
 			message = "expected to be <null>.";
 		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
@@ -191,7 +191,7 @@ z.should_not_be_null();
 +/
 void should_not_be_null(T)(T a, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a is null) {
-		if (!message)
+		if (! message)
 			message = "expected to NOT be <null>.";
 		throw new core.exception.AssertError(message, file, line);
 	}
@@ -237,7 +237,7 @@ void should_be_in(T, U)(T value, U[] valid_values, string file=__FILE__, size_t 
 		}
 	}
 
-	if (!is_valid) {
+	if (! is_valid) {
 		string message = "<" ~ value.to!string ~ "> is not in <[" ~ valid_values.join(", ") ~ "]>.";
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new core.exception.AssertError(message, file, line);
@@ -276,7 +276,7 @@ Example:
 +/
 void should_be_greater(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a <= b) {
-		if (!message) {
+		if (! message) {
 			message = "<" ~ a.to!string ~ "> expected to be greater than <" ~ b.to!string ~ ">.";
 		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
@@ -316,7 +316,7 @@ Example:
 +/
 void should_be_less(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a >= b) {
-		if (!message) {
+		if (! message) {
 			message = "<" ~ a.to!string ~ "> expected to be less than <" ~ b.to!string ~ ">.";
 		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
@@ -356,7 +356,7 @@ Example:
 +/
 void should_be_greater_or_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a < b) {
-		if (!message) {
+		if (! message) {
 			message = "<" ~ a.to!string ~ "> expected to be greater or equal to <" ~ b.to!string ~ ">.";
 		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
@@ -399,7 +399,7 @@ Example:
 +/
 void should_be_less_or_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a > b) {
-		if (!message) {
+		if (! message) {
 			message = "<" ~ a.to!string ~ "> expected to be less or equal to <" ~ b.to!string ~ ">.";
 		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
@@ -462,7 +462,7 @@ void should_throw(void delegate() cb, string message=null, string file=__FILE__,
 		}
 	}
 
-	if (!has_thrown) {
+	if (! has_thrown) {
 		if (message) {
 			throw new Exception("Exception was not thrown. Expected: " ~ message, file, line);
 		} else {
