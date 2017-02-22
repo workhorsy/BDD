@@ -496,56 +496,53 @@ unittest {
 	);
 }
 
+private string[][string] _fail_messages;
+private ulong _fail_count;
+private ulong _success_count;
+private void delegate() _before_it;
+private void delegate() _after_it;
 
 private struct TestPair {
 	public string it_message;
 	public void delegate() func;
 }
 
-public class Test {
-	private static string[][string] _fail_messages;
-	private static ulong _fail_count;
-	private static ulong _success_count;
-	private static void delegate() _before_it;
-	private static void delegate() _after_it;
+private static void add_success() {
+	_success_count++;
+}
 
-	private static void add_success() {
-		_success_count++;
-	}
+// Error
+private static void add_fail(string describe_message, TestPair pair, core.exception.Error err) {
+	_fail_messages[describe_message] ~= "\"" ~ pair.it_message ~ ": " ~ err.msg ~ "\" " ~ err.file ~ "(" ~ err.line.to!string() ~ ")";
+	_fail_count++;
+}
 
-	// Error
-	private static void add_fail(string describe_message, TestPair pair, core.exception.Error err) {
-		_fail_messages[describe_message] ~= "\"" ~ pair.it_message ~ ": " ~ err.msg ~ "\" " ~ err.file ~ "(" ~ err.line.to!string() ~ ")";
-		_fail_count++;
-	}
+// Exception
+private static void add_fail(string describe_message, TestPair pair, core.exception.Exception err) {
+	_fail_messages[describe_message] ~= "\"" ~ pair.it_message ~ ": " ~ err.msg ~ "\" " ~ err.file ~ "(" ~ err.line.to!string() ~ ")";
+	_fail_count++;
+}
 
-	// Exception
-	private static void add_fail(string describe_message, TestPair pair, core.exception.Exception err) {
-		_fail_messages[describe_message] ~= "\"" ~ pair.it_message ~ ": " ~ err.msg ~ "\" " ~ err.file ~ "(" ~ err.line.to!string() ~ ")";
-		_fail_count++;
-	}
+public static void before_it(void delegate() cb) {
+	_before_it = cb;
+}
 
-	public static void before_it(void delegate() cb) {
-		_before_it = cb;
-	}
-
-	public static void after_it(void delegate() cb) {
-		_after_it = cb;
-	}
+public static void after_it(void delegate() cb) {
+	_after_it = cb;
 }
 
 public static int print_results() {
 	writeln("Unit Test Results:");
-	writefln("%d total, %d successful, %d failed", Test._success_count + Test._fail_count, Test._success_count, Test._fail_count);
+	writefln("%d total, %d successful, %d failed", _success_count + _fail_count, _success_count, _fail_count);
 
-	foreach(a, b; Test._fail_messages) {
+	foreach(a, b; _fail_messages) {
 		writefln("%s", a);
 		foreach(c; b) {
 			writefln("- %s", c);
 		}
 	}
 
-	return Test._fail_count > 0;
+	return _fail_count > 0;
 }
 
 /++
@@ -577,19 +574,19 @@ public void describe(TestPair...)(string describe_message, TestPair pairs) {
 	foreach(pair; pairs) {
 		try {
 			//write("describe_message: " ~ describe_message ~ "#" ~ pair.it_message ~ " ... ");
-			if(Test._before_it)
-				Test._before_it();
+			if(_before_it)
+				_before_it();
 			pair.func();
-			if(Test._after_it)
-				Test._after_it();
+			if(_after_it)
+				_after_it();
 			//writeln(":)");
-			Test.add_success();
+			add_success();
 		} catch(core.exception.Error err) {
 			//writeln(":(");
-			Test.add_fail(describe_message, pair, err);
+			add_fail(describe_message, pair, err);
 		} catch(core.exception.Exception err) {
 			//writeln(":(");
-			Test.add_fail(describe_message, pair, err);
+			add_fail(describe_message, pair, err);
 		}
 	}
 }
