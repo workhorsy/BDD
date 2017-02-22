@@ -47,79 +47,6 @@ import core.exception;
 
 
 /++
-Used for asserting that a piece of code will throw an exception.
-
-Params:
- cb = The delegate that is expected to throw the exception.
- message = The message that is expected to be in the exception. Will not
-be tested, if it is null.
- file = The file name that the assert failed in. Should be left as default.
- line = The file line that the assert failed in. Should be left as default.
-
-Example:
-----
-should_throw(delegate() {
-	throw new Exception("boom!");
-}, "boom!");
-
-// Or without testing the message
-should_throw(delegate() {
-	throw new Exception("boom!");
-});
-----
-+/
-public void should_throw(void delegate() cb, string message=null, string file=__FILE__, size_t line=__LINE__) {
-	bool has_thrown = false;
-	try {
-		cb();
-	} catch(Exception ex) {
-		has_thrown = true;
-		if(message && message != ex.msg)
-			throw new Exception("Exception was thrown. But expected: " ~ message, file, line);
-	} catch(Error err) {
-		has_thrown = true;
-		if(message && message != err.msg)
-			throw new Exception("Error was thrown. But expected: " ~ message, file, line);
-	}
-
-	if(!has_thrown) {
-		if(message) {
-			throw new Exception("Exception was not thrown. Expected: " ~ message, file, line);
-		} else {
-			throw new Exception("Exception was not thrown. Expected one.", file, line);
-		}
-	}
-}
-
-unittest {
-	describe("dlang_helper#should_throw",
-		it("Should succeed when an exception is thrown", delegate() {
-			bool has_thrown = false;
-
-			should_throw(delegate() {
-				has_thrown = true;
-				throw new Exception("boom!");
-			});
-
-			has_thrown.should_equal(true);
-		}),
-		it("Should fail when an exception is not thrown", delegate() {
-			Exception ex = null;
-			try {
-				should_throw(delegate() {
-					// Does not throw
-				});
-			} catch(Exception exception) {
-				ex = exception;
-			}
-
-			ex.should_not_be_null();
-			ex.msg.should_equal("Exception was not thrown. Expected one.");
-		})
-	);
-}
-
-/++
 Used to assert that a value is equal to another value. Works just like assert.
  But it will automatically fill in the error message with you not having to do
 it yourself.
@@ -493,6 +420,80 @@ unittest {
 		})
 	);
 }
+
+/++
+Used for asserting that a piece of code will throw an exception.
+
+Params:
+ cb = The delegate that is expected to throw the exception.
+ message = The message that is expected to be in the exception. Will not
+be tested, if it is null.
+ file = The file name that the assert failed in. Should be left as default.
+ line = The file line that the assert failed in. Should be left as default.
+
+Example:
+----
+should_throw(delegate() {
+	throw new Exception("boom!");
+}, "boom!");
+
+// Or without testing the message
+should_throw(delegate() {
+	throw new Exception("boom!");
+});
+----
++/
+public void should_throw(void delegate() cb, string message=null, string file=__FILE__, size_t line=__LINE__) {
+	bool has_thrown = false;
+	try {
+		cb();
+	} catch(Exception ex) {
+		has_thrown = true;
+		if(message && message != ex.msg)
+			throw new Exception("Exception was thrown. But expected: " ~ message, file, line);
+	} catch(Error err) {
+		has_thrown = true;
+		if(message && message != err.msg)
+			throw new Exception("Error was thrown. But expected: " ~ message, file, line);
+	}
+
+	if(!has_thrown) {
+		if(message) {
+			throw new Exception("Exception was not thrown. Expected: " ~ message, file, line);
+		} else {
+			throw new Exception("Exception was not thrown. Expected one.", file, line);
+		}
+	}
+}
+
+unittest {
+	describe("dlang_helper#should_throw",
+		it("Should succeed when an exception is thrown", delegate() {
+			bool has_thrown = false;
+
+			should_throw(delegate() {
+				has_thrown = true;
+				throw new Exception("boom!");
+			});
+
+			has_thrown.should_equal(true);
+		}),
+		it("Should fail when an exception is not thrown", delegate() {
+			Exception ex = null;
+			try {
+				should_throw(delegate() {
+					// Does not throw
+				});
+			} catch(Exception exception) {
+				ex = exception;
+			}
+
+			ex.should_not_be_null();
+			ex.msg.should_equal("Exception was not thrown. Expected one.");
+		})
+	);
+}
+
 
 private struct TestPair {
 	public string it_message;
