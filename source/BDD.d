@@ -624,6 +624,5 @@ private void delegate() _after_it;
 	TODO:
 	* Make indentation in docs use 4 space sized tabs
 	* Change naming convention to proper D style. EG: should_equal to ShouldEqual?
-	* Remove asserts, as they may mislead people to not use should functions.
 	* Change string concatenation to string format.
 */
