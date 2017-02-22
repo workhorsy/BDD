@@ -72,7 +72,7 @@ void should_equal(T, U)(T a, U b, string message=null, string file=__FILE__, siz
 			message = "<" ~ a.to!string ~ "> expected to equal <" ~ b.to!string ~ ">.";
 		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
-		throw new core.exception.AssertError(message, file, line);
+		throw new AssertError(message, file, line);
 	}
 }
 
@@ -113,7 +113,7 @@ void should_not_equal(T, U)(T a, U b, string message=null, string file=__FILE__,
 			message = "<" ~ a.to!string ~ "> expected to NOT equal <" ~ b.to!string ~ ">.";
 		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
-		throw new core.exception.AssertError(message, file, line);
+		throw new AssertError(message, file, line);
 	}
 }
 
@@ -153,7 +153,7 @@ void should_be_null(T)(T a, string message=null, string file=__FILE__, size_t li
 			message = "expected to be <null>.";
 		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
-		throw new core.exception.AssertError(message, file, line);
+		throw new AssertError(message, file, line);
 	}
 }
 
@@ -194,7 +194,7 @@ void should_not_be_null(T)(T a, string message=null, string file=__FILE__, size_
 		if (! message) {
 			message = "expected to NOT be <null>.";
 		}
-		throw new core.exception.AssertError(message, file, line);
+		throw new AssertError(message, file, line);
 	}
 }
 
@@ -241,7 +241,7 @@ void should_be_in(T, U)(T value, U[] valid_values, string file=__FILE__, size_t 
 	if (! is_valid) {
 		string message = "<" ~ value.to!string ~ "> is not in <[" ~ valid_values.join(", ") ~ "]>.";
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
-		throw new core.exception.AssertError(message, file, line);
+		throw new AssertError(message, file, line);
 	}
 }
 
@@ -281,7 +281,7 @@ void should_be_greater(T, U)(T a, U b, string message=null, string file=__FILE__
 			message = "<" ~ a.to!string ~ "> expected to be greater than <" ~ b.to!string ~ ">.";
 		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
-		throw new core.exception.AssertError(message, file, line);
+		throw new AssertError(message, file, line);
 	}
 }
 
@@ -321,7 +321,7 @@ void should_be_less(T, U)(T a, U b, string message=null, string file=__FILE__, s
 			message = "<" ~ a.to!string ~ "> expected to be less than <" ~ b.to!string ~ ">.";
 		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
-		throw new core.exception.AssertError(message, file, line);
+		throw new AssertError(message, file, line);
 	}
 }
 
@@ -361,7 +361,7 @@ void should_be_greater_or_equal(T, U)(T a, U b, string message=null, string file
 			message = "<" ~ a.to!string ~ "> expected to be greater or equal to <" ~ b.to!string ~ ">.";
 		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
-		throw new core.exception.AssertError(message, file, line);
+		throw new AssertError(message, file, line);
 	}
 }
 
@@ -404,7 +404,7 @@ void should_be_less_or_equal(T, U)(T a, U b, string message=null, string file=__
 			message = "<" ~ a.to!string ~ "> expected to be less or equal to <" ~ b.to!string ~ ">.";
 		}
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
-		throw new core.exception.AssertError(message, file, line);
+		throw new AssertError(message, file, line);
 	}
 }
 
