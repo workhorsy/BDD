@@ -609,4 +609,5 @@ public TestPair it(string message, void delegate() func) {
 	* Change naming convention to proper D style. EG: should_equal to ShouldEqual?
 	* Removed extra public and private
 	* Remove asserts, as they may mislead people to not use should functions.
+	* Change string concatenation to string format.
 */
