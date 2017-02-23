@@ -482,15 +482,15 @@ void shouldThrow(void delegate() cb, string message=null, string file=__FILE__, 
 	} catch (Throwable ex) {
 		has_thrown = true;
 		if (message && message != ex.msg) {
-			throw new Exception("Throwable was thrown. But expected: " ~ message, file, line);
+			throw new AssertError("Exception was thrown. But expected: " ~ message, file, line);
 		}
 	}
 
 	if (! has_thrown) {
 		if (message) {
-			throw new Exception("Exception was not thrown. Expected: " ~ message, file, line);
+			throw new AssertError("Exception was not thrown. Expected: " ~ message, file, line);
 		} else {
-			throw new Exception("Exception was not thrown. Expected one.", file, line);
+			throw new AssertError("Exception was not thrown. Expected one.", file, line);
 		}
 	}
 }
@@ -508,12 +508,12 @@ unittest {
 			has_thrown.shouldEqual(true);
 		}),
 		it("Should fail when an exception is not thrown", delegate() {
-			Exception ex = null;
+			Throwable ex = null;
 			try {
 				shouldThrow(delegate() {
 					// Does not throw
 				});
-			} catch (Exception exception) {
+			} catch (Throwable exception) {
 				ex = exception;
 			}
 
