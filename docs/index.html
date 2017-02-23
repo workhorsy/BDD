@@ -554,9 +554,7 @@
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Used to assert that <code class="code">a</code> value is equal to another value. Works just like assert.
- But it will automatically fill in the error <code class="code">message</code> with you not having to do
-it yourself.
+    Used to assert that one value is equal to another value.
 
   </p>
 </div>
@@ -624,6 +622,15 @@ it yourself.
     </tbody>
   </table>
 </div>
+<div class="ddoc_throws">
+  <h4>Throws</h4>
+  <p class="para">
+    If values are not equal, will throw an AssertError with expected and actual
+ values.
+
+
+  </p>
+</div>
 <div class="ddoc_section">
   <p class="para">
     <span class="ddoc_section_h">Example:</span>
@@ -672,9 +679,7 @@ z.<span class="psymbol">shouldEqual</span>(5);
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Used to assert that <code class="code">a</code> value is NOT equal to another value. Works just
-like assert. But it will automatically fill in the error <code class="code">message</code> with you
-not having to do it yourself.
+    Used to assert that one value is NOT equal to another value.
 
   </p>
 </div>
@@ -742,6 +747,15 @@ not having to do it yourself.
     </tbody>
   </table>
 </div>
+<div class="ddoc_throws">
+  <h4>Throws</h4>
+  <p class="para">
+    If values are NOT equal, will throw an AssertError with unexpected and
+ actual values.
+
+
+  </p>
+</div>
 <div class="ddoc_section">
   <p class="para">
     <span class="ddoc_section_h">Example:</span>
@@ -790,9 +804,7 @@ z.<span class="psymbol">shouldNotEqual</span>(3);
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Used to assert that <code class="code">a</code> value is equal to <code class="code">null</code>. Works just
-like assert. But it will automatically fill in the error <code class="code">message</code> with you
-not having to do it yourself.
+    Used to assert that one value is equal to <code class="code">null</code>.
 
   </p>
 </div>
@@ -846,6 +858,14 @@ not having to do it yourself.
     </tbody>
   </table>
 </div>
+<div class="ddoc_throws">
+  <h4>Throws</h4>
+  <p class="para">
+    If value is NOT <code class="code">null</code>, will throw an AssertError.
+
+
+  </p>
+</div>
 <div class="ddoc_section">
   <p class="para">
     <span class="ddoc_section_h">Example:</span>
@@ -894,9 +914,7 @@ z.<span class="psymbol">shouldBeNull</span>();
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Used to assert that <code class="code">a</code> value is NOT equal to <code class="code">null</code>. Works just
-like assert. But it will automatically fill in the error <code class="code">message</code> with you
-not having to do it yourself.
+    Used to assert that one value is NOT equal to <code class="code">null</code>.
 
   </p>
 </div>
@@ -950,6 +968,14 @@ not having to do it yourself.
     </tbody>
   </table>
 </div>
+<div class="ddoc_throws">
+  <h4>Throws</h4>
+  <p class="para">
+    If value is <code class="code">null</code>, will throw an AssertError.
+
+
+  </p>
+</div>
 <div class="ddoc_section">
   <p class="para">
     <span class="ddoc_section_h">Example:</span>
@@ -998,9 +1024,7 @@ z.<span class="psymbol">shouldNotBeNull</span>();
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Used to assert that a <code class="code">value</code> is in an array of specified values. Works just like
-assert. But it will automatically fill in the error message with you not having
-to do it yourself.
+    Used to assert that one <code class="code">value</code> is in an array of specified values.
 
   </p>
 </div>
@@ -1068,6 +1092,15 @@ to do it yourself.
     </tbody>
   </table>
 </div>
+<div class="ddoc_throws">
+  <h4>Throws</h4>
+  <p class="para">
+    If the <code class="code">value</code> is not in the array, will throw an AssertError with the <code class="code">value</code>
+ and array values.
+
+
+  </p>
+</div>
 <div class="ddoc_section">
   <p class="para">
     <span class="ddoc_section_h">Example:</span>
@@ -1115,9 +1148,7 @@ to do it yourself.
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Used to assert that <code class="code">a</code> value is greater than another value. Works just like
-assert. But it will automatically fill in the error <code class="code">message</code> with you not having
-to do it yourself.
+    Used to assert that one value is greater than another value.
 
   </p>
 </div>
@@ -1185,6 +1216,15 @@ to do it yourself.
     </tbody>
   </table>
 </div>
+<div class="ddoc_throws">
+  <h4>Throws</h4>
+  <p class="para">
+    If the value is NOT greater, will throw an AssertError with expected and actual
+ values.
+
+
+  </p>
+</div>
 <div class="ddoc_section">
   <p class="para">
     <span class="ddoc_section_h">Example:</span>
@@ -1232,9 +1272,7 @@ to do it yourself.
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Used to assert that <code class="code">a</code> value is less than another value. Works just like
-assert. But it will automatically fill in the error <code class="code">message</code> with you not having
-to do it yourself.
+    Used to assert that one value is less than another value.
 
   </p>
 </div>
@@ -1302,6 +1340,15 @@ to do it yourself.
     </tbody>
   </table>
 </div>
+<div class="ddoc_throws">
+  <h4>Throws</h4>
+  <p class="para">
+    If the value is NOT less, will throw an AssertError with expected and actual
+ values.
+
+
+  </p>
+</div>
 <div class="ddoc_section">
   <p class="para">
     <span class="ddoc_section_h">Example:</span>
@@ -1349,9 +1396,7 @@ to do it yourself.
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Used to assert that <code class="code">a</code> value is greater or equal than another value. Works just like
-assert. But it will automatically fill in the error <code class="code">message</code> with you not having
-to do it yourself.
+    Used to assert that one value is greater or equal than another value.
 
   </p>
 </div>
@@ -1419,6 +1464,15 @@ to do it yourself.
     </tbody>
   </table>
 </div>
+<div class="ddoc_throws">
+  <h4>Throws</h4>
+  <p class="para">
+    If the value is NOT greater or equal, will throw an AssertError with expected and actual
+ values.
+
+
+  </p>
+</div>
 <div class="ddoc_section">
   <p class="para">
     <span class="ddoc_section_h">Example:</span>
@@ -1466,9 +1520,7 @@ to do it yourself.
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Used to assert that <code class="code">a</code> value is less or equal than another value. Works just like
-assert. But it will automatically fill in the error <code class="code">message</code> with you not having
-to do it yourself.
+    Used to assert that one value is less or equal than another value.
 
   </p>
 </div>
@@ -1536,6 +1588,15 @@ to do it yourself.
     </tbody>
   </table>
 </div>
+<div class="ddoc_throws">
+  <h4>Throws</h4>
+  <p class="para">
+    If the value is NOT less or equal, will throw an AssertError with expected and actual
+ values.
+
+
+  </p>
+</div>
 <div class="ddoc_section">
   <p class="para">
     <span class="ddoc_section_h">Example:</span>
@@ -1583,7 +1644,7 @@ to do it yourself.
   <section class="section ddoc_sections">
   <div class="ddoc_summary">
   <p class="para">
-    Used for asserting that a piece of code will throw an exception.
+    Used for asserting that a delegate will throw an exception.
 
   </p>
 </div>
@@ -1651,6 +1712,14 @@ be tested, if it is <code class="code">null</code>.
 
     </tbody>
   </table>
+</div>
+<div class="ddoc_throws">
+  <h4>Throws</h4>
+  <p class="para">
+    If delegate does NOT throw, will throw an AssertError.
+
+
+  </p>
 </div>
 <div class="ddoc_section">
   <p class="para">
