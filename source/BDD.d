@@ -76,7 +76,7 @@ void should_equal(T, U)(T a, U b, string message=null, string file=__FILE__, siz
 }
 
 unittest {
-	describe("dlang_helper#should_equal",
+	describe("BDD#should_equal",
 		it("Should succeed when equal", delegate() {
 			"abc".should_equal("abc");
 		}),
@@ -117,7 +117,7 @@ void should_not_equal(T, U)(T a, U b, string message=null, string file=__FILE__,
 }
 
 unittest {
-	describe("dlang_helper#should_not_equal",
+	describe("BDD#should_not_equal",
 		it("Should succeed when NOT equal", delegate() {
 			"abc".should_not_equal("xyz");
 		}),
@@ -157,7 +157,7 @@ void should_be_null(T)(T a, string message=null, string file=__FILE__, size_t li
 }
 
 unittest {
-	describe("dlang_helper#should_be_null",
+	describe("BDD#should_be_null",
 		it("Should succeed when it is null", delegate() {
 			string value = null;
 			value.should_be_null();
@@ -198,7 +198,7 @@ void should_not_be_null(T)(T a, string message=null, string file=__FILE__, size_
 }
 
 unittest {
-	describe("dlang_helper#should_not_be_null",
+	describe("BDD#should_not_be_null",
 		it("Should succeed when it is NOT null", delegate() {
 			"abc".should_not_be_null();
 		}),
@@ -245,7 +245,7 @@ void should_be_in(T, U)(T value, U[] valid_values, string file=__FILE__, size_t 
 }
 
 unittest {
-	describe("dlang_helper#should_be_in",
+	describe("BDD#should_be_in",
 		it("Should succeed when the string is in the array", delegate() {
 			"abc".should_be_in(["abc", "xyz"]);
 		}),
@@ -285,7 +285,7 @@ void should_be_greater(T, U)(T a, U b, string message=null, string file=__FILE__
 }
 
 unittest {
-	describe("dlang_helper#should_be_greater",
+	describe("BDD#should_be_greater",
 		it("Should succeed when one is greater", delegate() {
 			10.should_be_greater(5);
 		}),
@@ -325,7 +325,7 @@ void should_be_less(T, U)(T a, U b, string message=null, string file=__FILE__, s
 }
 
 unittest {
-	describe("dlang_helper#should_be_less",
+	describe("BDD#should_be_less",
 		it("Should succeed when one is less", delegate() {
 			5.should_be_less(10);
 		}),
@@ -365,7 +365,7 @@ void should_be_greater_or_equal(T, U)(T a, U b, string message=null, string file
 }
 
 unittest {
-	describe("dlang_helper#should_be_greater_or_equal",
+	describe("BDD#should_be_greater_or_equal",
 		it("Should succeed when one is greater", delegate() {
 			10.should_be_greater_or_equal(5);
 		}),
@@ -408,7 +408,7 @@ void should_be_less_or_equal(T, U)(T a, U b, string message=null, string file=__
 }
 
 unittest {
-	describe("dlang_helper#should_be_less_or_equal",
+	describe("BDD#should_be_less_or_equal",
 		it("Should succeed when one is less", delegate() {
 			5.should_be_less_or_equal(10);
 		}),
@@ -477,7 +477,7 @@ void should_throw(void delegate() cb, string message=null, string file=__FILE__,
 }
 
 unittest {
-	describe("dlang_helper#should_throw",
+	describe("BDD#should_throw",
 		it("Should succeed when an exception is thrown", delegate() {
 			bool has_thrown = false;
 
