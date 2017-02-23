@@ -574,9 +574,9 @@ void describe(TestPair...)(string describe_message, TestPair pairs) {
 				_after_it();
 			}
 
-			add_success();
+			addSuccess();
 		} catch (Throwable ex) {
-			add_fail(describe_message, pair, ex);
+			addFail(describe_message, pair, ex);
 		}
 	}
 }
@@ -614,11 +614,11 @@ private struct TestPair {
 	void delegate() func;
 }
 
-private void add_success() {
+private void addSuccess() {
 	_success_count++;
 }
 
-private void add_fail(string describe_message, TestPair pair, Throwable err) {
+private void addFail(string describe_message, TestPair pair, Throwable err) {
 	_fail_messages[describe_message] ~= `"%s: %s" %s(%s)`.format(pair.it_message, err.msg, err.file, err.line);
 	_fail_count++;
 }
