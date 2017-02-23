@@ -1,0 +1,27 @@
+
+
+BDD History
+
+10-02-2010:
+	The library was originally created as part of a web framework called
+	Rooting Tootin. It contained basic "describe" and "it" functionality
+	of Behavior Driven Development. It was heavily inspired by the Ruby
+	library Shoulda:
+	http://bazaar.launchpad.net/~workhorsy/rester/trunk/revision/441
+
+09-20-2011:
+	The library was extracted from Rooting Tootin, and put into a smaller
+	library called D Language Helper. It was updated to work with both of
+	the D core libraries Phobos and Tango:
+	http://bazaar.launchpad.net/~workhorsy/dlanghelper/main/revision/1
+
+01-16-2013:
+	The library replaced "assert" style tests with "should" style tests:
+	http://bazaar.launchpad.net/~workhorsy/dlanghelper/main/revision/62
+
+02-20-2017:
+	The Behavior Driven Development elements were extracted from
+	D Language Helper and put into their own library called BDD. The
+	library was cleaned up to work with Phobos (no more Tango), and made
+	to work with the Dub packaging system:
+	https://github.com/workhorsy/BDD
