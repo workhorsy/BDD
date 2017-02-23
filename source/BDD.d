@@ -48,15 +48,17 @@ import core.exception;
 
 
 /++
-Used to assert that a value is equal to another value. Works just like assert.
- But it will automatically fill in the error message with you not having to do
-it yourself.
+Used to assert that one value is equal to another value.
 
 Params:
  a = The value to test.
  b = The value it should be equal to.
  file = The file name that the assert failed in. Should be left as default.
  line = The file line that the assert failed in. Should be left as default.
+
+Throws:
+ If values are not equal, will throw an AssertError with expected and actual
+ values.
 
 Example:
 ----
@@ -89,15 +91,17 @@ unittest {
 }
 
 /++
-Used to assert that a value is NOT equal to another value. Works just
-like assert. But it will automatically fill in the error message with you
-not having to do it yourself.
+Used to assert that one value is NOT equal to another value.
 
 Params:
  a = The value to test.
  b = The value it should NOT be equal to.
  file = The file name that the assert failed in. Should be left as default.
  line = The file line that the assert failed in. Should be left as default.
+
+Throws:
+ If values are NOT equal, will throw an AssertError with unexpected and
+ actual values.
 
 Example:
 ----
@@ -130,14 +134,15 @@ unittest {
 }
 
 /++
-Used to assert that a value is equal to null. Works just
-like assert. But it will automatically fill in the error message with you
-not having to do it yourself.
+Used to assert that one value is equal to null.
 
 Params:
  a = The value that should equal null.
  file = The file name that the assert failed in. Should be left as default.
  line = The file line that the assert failed in. Should be left as default.
+
+Throws:
+ If value is NOT null, will throw an AssertError.
 
 Example:
 ----
@@ -172,14 +177,15 @@ unittest {
 }
 
 /++
-Used to assert that a value is NOT equal to null. Works just
-like assert. But it will automatically fill in the error message with you
-not having to do it yourself.
+Used to assert that one value is NOT equal to null.
 
 Params:
  a = The value that should NOT equal null.
  file = The file name that the assert failed in. Should be left as default.
  line = The file line that the assert failed in. Should be left as default.
+
+Throws:
+ If value is null, will throw an AssertError.
 
 Example:
 ----
@@ -212,15 +218,17 @@ unittest {
 }
 
 /++
-Used to assert that a value is in an array of specified values. Works just like
-assert. But it will automatically fill in the error message with you not having
-to do it yourself.
+Used to assert that one value is in an array of specified values.
 
 Params:
  value = The value to test.
  valid_values = An array of valid values.
  file = The file name that the assert failed in. Should be left as default.
  line = The file line that the assert failed in. Should be left as default.
+
+Throws:
+ If the value is not in the array, will throw an AssertError with the value
+ and array values.
 
 Example:
 ----
@@ -258,15 +266,17 @@ unittest {
 }
 
 /++
-Used to assert that a value is greater than another value. Works just like
-assert. But it will automatically fill in the error message with you not having
-to do it yourself.
+Used to assert that one value is greater than another value.
 
 Params:
  a = The value to test.
  b = The value it should be greater than.
  file = The file name that the assert failed in. Should be left as default.
  line = The file line that the assert failed in. Should be left as default.
+
+Throws:
+ If the value is NOT greater, will throw an AssertError with expected and actual
+ values.
 
 Example:
 ----
@@ -298,15 +308,17 @@ unittest {
 }
 
 /++
-Used to assert that a value is less than another value. Works just like
-assert. But it will automatically fill in the error message with you not having
-to do it yourself.
+Used to assert that one value is less than another value.
 
 Params:
  a = The value to test.
  b = The value it should be less than.
  file = The file name that the assert failed in. Should be left as default.
  line = The file line that the assert failed in. Should be left as default.
+
+Throws:
+ If the value is NOT less, will throw an AssertError with expected and actual
+ values.
 
 Example:
 ----
@@ -338,15 +350,17 @@ unittest {
 }
 
 /++
-Used to assert that a value is greater or equal than another value. Works just like
-assert. But it will automatically fill in the error message with you not having
-to do it yourself.
+Used to assert that one value is greater or equal than another value.
 
 Params:
  a = The value to test.
  b = The value it should be greater or equal than.
  file = The file name that the assert failed in. Should be left as default.
  line = The file line that the assert failed in. Should be left as default.
+
+Throws:
+ If the value is NOT greater or equal, will throw an AssertError with expected and actual
+ values.
 
 Example:
 ----
@@ -381,15 +395,17 @@ unittest {
 }
 
 /++
-Used to assert that a value is less or equal than another value. Works just like
-assert. But it will automatically fill in the error message with you not having
-to do it yourself.
+Used to assert that one value is less or equal than another value.
 
 Params:
  a = The value to test.
  b = The value it should be less or equal than.
  file = The file name that the assert failed in. Should be left as default.
  line = The file line that the assert failed in. Should be left as default.
+
+Throws:
+ If the value is NOT less or equal, will throw an AssertError with expected and actual
+ values.
 
 Example:
 ----
@@ -424,7 +440,7 @@ unittest {
 }
 
 /++
-Used for asserting that a piece of code will throw an exception.
+Used for asserting that a delegate will throw an exception.
 
 Params:
  cb = The delegate that is expected to throw the exception.
@@ -432,6 +448,9 @@ Params:
 be tested, if it is null.
  file = The file name that the assert failed in. Should be left as default.
  line = The file line that the assert failed in. Should be left as default.
+
+Throws:
+ If delegate does NOT throw, will throw an AssertError.
 
 Example:
 ----
