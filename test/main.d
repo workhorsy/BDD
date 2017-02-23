@@ -3,5 +3,5 @@
 import BDD;
 
 int main() {
-	return BDD.print_results();
+	return BDD.printResults();
 }

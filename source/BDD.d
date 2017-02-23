@@ -23,17 +23,17 @@ int add(int a, int b) {
 unittest {
 	describe("math#add",
 		it("Should add positive numbers", delegate() {
-			add(5, 7).should_equal(12);
+			add(5, 7).shouldEqual(12);
 		}),
 		it("Should add negative numbers", delegate() {
-			add(5, -7).should_equal(-2);
+			add(5, -7).shouldEqual(-2);
 		})
 	);
 }
 
 // Prints the results of the tests
 int main() {
-	return BDD.print_results();
+	return BDD.printResults();
 }
 ----
 +/
@@ -62,10 +62,10 @@ Example:
 ----
 // Will throw an exception like "AssertError@example.d(6): <3> expected to equal <5>."
 int z = 3;
-z.should_equal(5);
+z.shouldEqual(5);
 ----
 +/
-void should_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
+void shouldEqual(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a != b) {
 		if (! message) {
 			message = "<%s> expected to equal <%s>.".format(a, b);
@@ -76,13 +76,13 @@ void should_equal(T, U)(T a, U b, string message=null, string file=__FILE__, siz
 }
 
 unittest {
-	describe("BDD#should_equal",
+	describe("BDD#shouldEqual",
 		it("Should succeed when equal", delegate() {
-			"abc".should_equal("abc");
+			"abc".shouldEqual("abc");
 		}),
 		it("Should fail when NOT equal", delegate() {
-			should_throw(delegate() {
-				"abc".should_equal("xyz");
+			shouldThrow(delegate() {
+				"abc".shouldEqual("xyz");
 			}, "<abc> expected to equal <xyz>.");
 		})
 	);
@@ -103,10 +103,10 @@ Example:
 ----
 // Will throw an exception like "AssertError@example.d(6): <3> expected to NOT equal <3>."
 int z = 3;
-z.should_not_equal(3);
+z.shouldNotEqual(3);
 ----
 +/
-void should_not_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
+void shouldNotEqual(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a == b) {
 		if (! message) {
 			message = "<%s> expected to NOT equal <%s>.".format(a, b);
@@ -117,13 +117,13 @@ void should_not_equal(T, U)(T a, U b, string message=null, string file=__FILE__,
 }
 
 unittest {
-	describe("BDD#should_not_equal",
+	describe("BDD#shouldNotEqual",
 		it("Should succeed when NOT equal", delegate() {
-			"abc".should_not_equal("xyz");
+			"abc".shouldNotEqual("xyz");
 		}),
 		it("Should fail when equal", delegate() {
-			should_throw(delegate() {
-				"abc".should_not_equal("abc");
+			shouldThrow(delegate() {
+				"abc".shouldNotEqual("abc");
 			}, "<abc> expected to NOT equal <abc>.");
 		})
 	);
@@ -143,10 +143,10 @@ Example:
 ----
 // Will throw an exception like "AssertError@example.d(6): expected to be <null>."
 string z = "blah";
-z.should_be_null();
+z.shouldBeNull();
 ----
 +/
-void should_be_null(T)(T a, string message=null, string file=__FILE__, size_t line=__LINE__) {
+void shouldBeNull(T)(T a, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a !is null) {
 		if (! message) {
 			message = "expected to be <null>.";
@@ -157,15 +157,15 @@ void should_be_null(T)(T a, string message=null, string file=__FILE__, size_t li
 }
 
 unittest {
-	describe("BDD#should_be_null",
+	describe("BDD#shouldBeNull",
 		it("Should succeed when it is null", delegate() {
 			string value = null;
-			value.should_be_null();
+			value.shouldBeNull();
 		}),
 		it("Should fail when it is NOT null", delegate() {
-			should_throw(delegate() {
+			shouldThrow(delegate() {
 				string value = "abc";
-				value.should_be_null();
+				value.shouldBeNull();
 			}, "expected to be <null>.");
 		})
 	);
@@ -185,10 +185,10 @@ Example:
 ----
 // Will throw an exception like "AssertError@example.d(6): expected to NOT be <null>."
 string z = null;
-z.should_not_be_null();
+z.shouldNotBeNull();
 ----
 +/
-void should_not_be_null(T)(T a, string message=null, string file=__FILE__, size_t line=__LINE__) {
+void shouldNotBeNull(T)(T a, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a is null) {
 		if (! message) {
 			message = "expected to NOT be <null>.";
@@ -198,14 +198,14 @@ void should_not_be_null(T)(T a, string message=null, string file=__FILE__, size_
 }
 
 unittest {
-	describe("BDD#should_not_be_null",
+	describe("BDD#shouldNotBeNull",
 		it("Should succeed when it is NOT null", delegate() {
-			"abc".should_not_be_null();
+			"abc".shouldNotBeNull();
 		}),
 		it("Should fail when it is null", delegate() {
-			should_throw(delegate() {
+			shouldThrow(delegate() {
 				string value = null;
-				value.should_not_be_null();
+				value.shouldNotBeNull();
 			}, "expected to NOT be <null>.");
 		})
 	);
@@ -225,10 +225,10 @@ Params:
 Example:
 ----
 // Will throw an exception like "AssertError@example.d(6): <Bobrick> is not in <[Tim, Al]>."
-"Bobrick".should_be_in(["Tim", "Al"]);
+"Bobrick".shouldBeIn(["Tim", "Al"]);
 ----
 +/
-void should_be_in(T, U)(T value, U[] valid_values, string file=__FILE__, size_t line=__LINE__) {
+void shouldBeIn(T, U)(T value, U[] valid_values, string file=__FILE__, size_t line=__LINE__) {
 	bool is_valid = false;
 
 	foreach (valid; valid_values) {
@@ -245,13 +245,13 @@ void should_be_in(T, U)(T value, U[] valid_values, string file=__FILE__, size_t 
 }
 
 unittest {
-	describe("BDD#should_be_in",
+	describe("BDD#shouldBeIn",
 		it("Should succeed when the string is in the array", delegate() {
-			"abc".should_be_in(["abc", "xyz"]);
+			"abc".shouldBeIn(["abc", "xyz"]);
 		}),
 		it("Should fail when the string is NOT in the array", delegate() {
-			should_throw(delegate() {
-				"qed".should_be_in(["abc", "xyz"]);
+			shouldThrow(delegate() {
+				"qed".shouldBeIn(["abc", "xyz"]);
 			}, "<qed> is not in <[abc, xyz]>.");
 		})
 	);
@@ -271,10 +271,10 @@ Params:
 Example:
 ----
 // Will throw an exception like "AssertError@example.d(6): <5> expected to be greater than <10>."
-5.should_be_greater(10);
+5.shouldBeGreater(10);
 ----
 +/
-void should_be_greater(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
+void shouldBeGreater(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a <= b) {
 		if (! message) {
 			message = "<%s> expected to be greater than <%s>.".format(a, b);
@@ -285,13 +285,13 @@ void should_be_greater(T, U)(T a, U b, string message=null, string file=__FILE__
 }
 
 unittest {
-	describe("BDD#should_be_greater",
+	describe("BDD#shouldBeGreater",
 		it("Should succeed when one is greater", delegate() {
-			10.should_be_greater(5);
+			10.shouldBeGreater(5);
 		}),
 		it("Should fail when one is NOT greater", delegate() {
-			should_throw(delegate() {
-				5.should_be_greater(10);
+			shouldThrow(delegate() {
+				5.shouldBeGreater(10);
 			}, "<5> expected to be greater than <10>.");
 		})
 	);
@@ -311,10 +311,10 @@ Params:
 Example:
 ----
 // Will throw an exception like "AssertError@example.d(6): <10> expected to be less than <5>."
-10.should_be_less(5);
+10.shouldBeLess(5);
 ----
 +/
-void should_be_less(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
+void shouldBeLess(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a >= b) {
 		if (! message) {
 			message = "<%s> expected to be less than <%s>.".format(a, b);
@@ -325,13 +325,13 @@ void should_be_less(T, U)(T a, U b, string message=null, string file=__FILE__, s
 }
 
 unittest {
-	describe("BDD#should_be_less",
+	describe("BDD#shouldBeLess",
 		it("Should succeed when one is less", delegate() {
-			5.should_be_less(10);
+			5.shouldBeLess(10);
 		}),
 		it("Should fail when one is NOT less", delegate() {
-			should_throw(delegate() {
-				10.should_be_less(5);
+			shouldThrow(delegate() {
+				10.shouldBeLess(5);
 			}, "<10> expected to be less than <5>.");
 		})
 	);
@@ -351,10 +351,10 @@ Params:
 Example:
 ----
 // Will throw an exception like "AssertError@example.d(6): <5> expected to be greater or equal to <10>."
-5.should_be_greater_or_equal(10);
+5.shouldBeGreaterOrEqual(10);
 ----
 +/
-void should_be_greater_or_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
+void shouldBeGreaterOrEqual(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a < b) {
 		if (! message) {
 			message = "<%s> expected to be greater or equal to <%s>.".format(a, b);
@@ -365,16 +365,16 @@ void should_be_greater_or_equal(T, U)(T a, U b, string message=null, string file
 }
 
 unittest {
-	describe("BDD#should_be_greater_or_equal",
+	describe("BDD#shouldBeGreaterOrEqual",
 		it("Should succeed when one is greater", delegate() {
-			10.should_be_greater_or_equal(5);
+			10.shouldBeGreaterOrEqual(5);
 		}),
 		it("Should succeed when one is equal", delegate() {
-			10.should_be_greater_or_equal(10);
+			10.shouldBeGreaterOrEqual(10);
 		}),
 		it("Should fail when one is less", delegate() {
-			should_throw(delegate() {
-				5.should_be_greater_or_equal(10);
+			shouldThrow(delegate() {
+				5.shouldBeGreaterOrEqual(10);
 			}, "<5> expected to be greater or equal to <10>.");
 		})
 	);
@@ -394,10 +394,10 @@ Params:
 Example:
 ----
 // Will throw an exception like "AssertError@example.d(6): <10> expected to be less or equal to <5>."
-10.should_be_less_or_equal(5);
+10.shouldBeLessOrEqual(5);
 ----
 +/
-void should_be_less_or_equal(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
+void shouldBeLessOrEqual(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	if (a > b) {
 		if (! message) {
 			message = "<%s> expected to be less or equal to <%s>.".format(a, b);
@@ -408,16 +408,16 @@ void should_be_less_or_equal(T, U)(T a, U b, string message=null, string file=__
 }
 
 unittest {
-	describe("BDD#should_be_less_or_equal",
+	describe("BDD#shouldBeLessOrEqual",
 		it("Should succeed when one is less", delegate() {
-			5.should_be_less_or_equal(10);
+			5.shouldBeLessOrEqual(10);
 		}),
 		it("Should succeed when one is equal", delegate() {
-			10.should_be_less_or_equal(10);
+			10.shouldBeLessOrEqual(10);
 		}),
 		it("Should fail when one is less", delegate() {
-			should_throw(delegate() {
-				10.should_be_less_or_equal(5);
+			shouldThrow(delegate() {
+				10.shouldBeLessOrEqual(5);
 			}, "<10> expected to be less or equal to <5>.");
 		})
 	);
@@ -436,27 +436,27 @@ be tested, if it is null.
 Example:
 ----
 // Makes sure it throws with the message "boom!"
-should_throw(delegate() {
+shouldThrow(delegate() {
 	throw new Exception("boom!");
 }, "boom!");
 
 // Makes sure it throws, but does not check the message
-should_throw(delegate() {
+shouldThrow(delegate() {
 	throw new Exception("boom!");
 });
 
 // Will throw an exception like "Exception@test/example.d(7): Exception was not thrown. Expected: boom!"
-should_throw(delegate() {
+shouldThrow(delegate() {
 
 }, "boom!");
 
 // Will throw an exception like "Exception@test/example.d(7): Exception was not thrown. Expected one.
-should_throw(delegate() {
+shouldThrow(delegate() {
 
 });
 ----
 +/
-void should_throw(void delegate() cb, string message=null, string file=__FILE__, size_t line=__LINE__) {
+void shouldThrow(void delegate() cb, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	bool has_thrown = false;
 	try {
 		cb();
@@ -477,38 +477,38 @@ void should_throw(void delegate() cb, string message=null, string file=__FILE__,
 }
 
 unittest {
-	describe("BDD#should_throw",
+	describe("BDD#shouldThrow",
 		it("Should succeed when an exception is thrown", delegate() {
 			bool has_thrown = false;
 
-			should_throw(delegate() {
+			shouldThrow(delegate() {
 				has_thrown = true;
 				throw new Exception("boom!");
 			});
 
-			has_thrown.should_equal(true);
+			has_thrown.shouldEqual(true);
 		}),
 		it("Should fail when an exception is not thrown", delegate() {
 			Exception ex = null;
 			try {
-				should_throw(delegate() {
+				shouldThrow(delegate() {
 					// Does not throw
 				});
 			} catch (Exception exception) {
 				ex = exception;
 			}
 
-			ex.should_not_be_null();
-			ex.msg.should_equal("Exception was not thrown. Expected one.");
+			ex.shouldNotBeNull();
+			ex.msg.shouldEqual("Exception was not thrown. Expected one.");
 		})
 	);
 }
 
-void before_it(void delegate() cb) {
+void beforeIt(void delegate() cb) {
 	_before_it = cb;
 }
 
-void after_it(void delegate() cb) {
+void afterIt(void delegate() cb) {
 	_after_it = cb;
 }
 
@@ -518,7 +518,7 @@ Prints the results of all the tests. Returns 0 if all tests pass, or 1 if any fa
 
 Example:
 ----
-	BDD.print_results();
+	BDD.printResults();
 ----
 
 Output:
@@ -531,7 +531,7 @@ math#subtract
 - "5 - 7 = -2: <-2> expected to equal <456>." broken_math.d(6)
 ----
 +/
-int print_results() {
+int printResults() {
 	stdout.writeln("Unit Test Results:");
 	stdout.writefln("%d total, %d successful, %d failed", _success_count + _fail_count, _success_count, _fail_count);
 
@@ -593,10 +593,10 @@ Example:
 int a = 4;
 describe("example_library#a",
 	it("Should equal 4", delegate() {
-		a.should_equal(4);
+		a.shouldEqual(4);
 	}),
 	it("Should Not equal 5", delegate() {
-		a.should_not_equal(5);
+		a.shouldNotEqual(5);
 	})
 );
 ----
@@ -632,5 +632,4 @@ private void delegate() _after_it;
 /*
 	TODO:
 	* Make indentation in docs use 4 space sized tabs
-	* Change naming convention to proper D style. EG: should_equal to ShouldEqual?
 */
