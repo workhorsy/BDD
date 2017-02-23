@@ -464,12 +464,12 @@ shouldThrow(delegate() {
 	throw new Exception("boom!");
 });
 
-// Will throw an exception like "Exception@test/example.d(7): Exception was not thrown. Expected: boom!"
+// Will throw an exception like "AssertError@test/example.d(7): Exception was not thrown. Expected: boom!"
 shouldThrow(delegate() {
 
 }, "boom!");
 
-// Will throw an exception like "Exception@test/example.d(7): Exception was not thrown. Expected one.
+// Will throw an exception like "AssertError@test/example.d(7): Exception was not thrown. Expected one.
 shouldThrow(delegate() {
 
 });
