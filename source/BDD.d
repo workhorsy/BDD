@@ -12,7 +12,7 @@ $(LINK https://github.com/workhorsy/BDD)
 License:
 Boost Software License - Version 1.0
 
-Example:
+Examples:
 ----
 import BDD;
 
@@ -60,7 +60,7 @@ Throws:
  If values are not equal, will throw an AssertError with expected and actual
  values.
 
-Example:
+Examples:
 ----
 // Will throw an exception like "AssertError@example.d(6): <3> expected to equal <5>."
 int z = 3;
@@ -103,7 +103,7 @@ Throws:
  If values are NOT equal, will throw an AssertError with unexpected and
  actual values.
 
-Example:
+Examples:
 ----
 // Will throw an exception like "AssertError@example.d(6): <3> expected to NOT equal <3>."
 int z = 3;
@@ -144,7 +144,7 @@ Params:
 Throws:
  If value is NOT null, will throw an AssertError.
 
-Example:
+Examples:
 ----
 // Will throw an exception like "AssertError@example.d(6): expected to be <null>."
 string z = "blah";
@@ -187,7 +187,7 @@ Params:
 Throws:
  If value is null, will throw an AssertError.
 
-Example:
+Examples:
 ----
 // Will throw an exception like "AssertError@example.d(6): expected to NOT be <null>."
 string z = null;
@@ -230,7 +230,7 @@ Throws:
  If the value is not in the array, will throw an AssertError with the value
  and array values.
 
-Example:
+Examples:
 ----
 // Will throw an exception like "AssertError@example.d(6): <Bobrick> is not in <[Tim, Al]>."
 "Bobrick".shouldBeIn(["Tim", "Al"]);
@@ -278,7 +278,7 @@ Throws:
  If the value is NOT greater, will throw an AssertError with expected and actual
  values.
 
-Example:
+Examples:
 ----
 // Will throw an exception like "AssertError@example.d(6): <5> expected to be greater than <10>."
 5.shouldBeGreater(10);
@@ -320,7 +320,7 @@ Throws:
  If the value is NOT less, will throw an AssertError with expected and actual
  values.
 
-Example:
+Examples:
 ----
 // Will throw an exception like "AssertError@example.d(6): <10> expected to be less than <5>."
 10.shouldBeLess(5);
@@ -362,7 +362,7 @@ Throws:
  If the value is NOT greater or equal, will throw an AssertError with expected and actual
  values.
 
-Example:
+Examples:
 ----
 // Will throw an exception like "AssertError@example.d(6): <5> expected to be greater or equal to <10>."
 5.shouldBeGreaterOrEqual(10);
@@ -407,7 +407,7 @@ Throws:
  If the value is NOT less or equal, will throw an AssertError with expected and actual
  values.
 
-Example:
+Examples:
 ----
 // Will throw an exception like "AssertError@example.d(6): <10> expected to be less or equal to <5>."
 10.shouldBeLessOrEqual(5);
@@ -452,7 +452,7 @@ be tested, if it is null.
 Throws:
  If delegate does NOT throw, will throw an AssertError.
 
-Example:
+Examples:
 ----
 // Makes sure it throws with the message "boom!"
 shouldThrow(delegate() {
@@ -535,7 +535,7 @@ void afterIt(void delegate() cb) {
 /++
 Prints the results of all the tests. Returns 0 if all tests pass, or 1 if any fail.
 
-Example:
+Examples:
 ----
 	BDD.printResults();
 ----
@@ -571,7 +571,7 @@ Params:
  describe_message = The thing that is being described.
  pairs = All the 'it' delegate functions that will test the thing.
 
-Example:
+Examples:
 ----
 	describe("example_library#thing_to_test",
 		it("Should NOT fail", delegate() {
@@ -607,7 +607,7 @@ Params:
  message = The message to print when the test fails.
  func = The delegate to call when running the test.
 
-Example:
+Examples:
 ----
 int a = 4;
 describe("example_library#a",
