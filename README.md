@@ -3,12 +3,12 @@ Behavior Driven Development for the D programming language
 
 # Documentation
 
-[https://workhorsy.github.io/BDD/1.2.0/](https://workhorsy.github.io/BDD/1.2.0/)
+[https://workhorsy.github.io/BDD/1.3.0/](https://workhorsy.github.io/BDD/1.3.0/)
 
 # Generate documentation
 
 ```
-dmd -c -D source/BDD.d -Df=docs/1.2.0/index.html
+dmd -c -D source/BDD.d -Df=docs/1.3.0/index.html
 ```
 
 # Run unit tests
