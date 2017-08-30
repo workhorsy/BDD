@@ -9,7 +9,6 @@ sed 's/$VERSION/'$VERSION'/g' tools/README.md.template > README.md
 
 # Generate documentation
 dmd -c -D source/BDD.d -Df=docs/$VERSION/index.html
-exit
 git add docs/$VERSION/
 
 # Create release
