@@ -14,7 +14,7 @@ dub --build=docs
 # Run unit tests
 
 ```
-dub test --main-file=test/main.d
+dub test
 ```
 
 [![Dub version](https://img.shields.io/dub/v/bdd.svg)](https://code.dlang.org/packages/bdd)

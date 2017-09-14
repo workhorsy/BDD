@@ -8,8 +8,23 @@
 	"copyright": "Copyright (c) 2017 Matthew Brennan Jones",
 	"license": "BSL-1.0",
 	"importPaths": ["source/"],
-
-	"targetName": "bdd",
-	"targetType": "staticLibrary",
 	"targetPath": "lib",
+
+	"configurations": [
+		{
+			"name": "default",
+			"targetName": "bdd",
+			"targetType": "staticLibrary",
+			"dependencies": {
+			},
+		},
+		{
+			"name": "unittest",
+			"targetName": "bdd-test",
+			"targetType": "executable",
+			"mainSourceFile": "test/main.d",
+			"dependencies": {
+			},
+		},
+	],
 }
