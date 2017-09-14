@@ -8,7 +8,7 @@ Behavior Driven Development for the D programming language
 # Generate documentation
 
 ```
-dmd -c -D source/BDD.d -Df=docs/$VERSION/index.html
+dub --build=docs
 ```
 
 # Run unit tests
