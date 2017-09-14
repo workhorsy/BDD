@@ -5,7 +5,7 @@ set -e
 VERSION="1.3.0"
 
 cd ..
-sed 's/$VERSION/'$VERSION'/g' tools/README.md.template > README.md
+sed 's/$VERSION/'$VERSION'/g' tools/README.template.md > README.md
 
 # Generate documentation
 dmd -c -D source/BDD.d -Df=docs/$VERSION/index.html
