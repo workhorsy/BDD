@@ -43,11 +43,6 @@ int main() {
 
 module BDD;
 
-import std.array;
-import std.stdio;
-import std.string;
-import core.exception;
-
 
 /++
 Used to assert that one value is equal to another value.
@@ -70,6 +65,10 @@ z.shouldEqual(5);
 ----
 +/
 void shouldEqual(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
+	import std.string : format;
+	import std.array : replace;
+	import core.exception : AssertError;
+
 	if (a != b) {
 		if (! message) {
 			message = "<%s> expected to equal <%s>.".format(a, b);
@@ -113,6 +112,10 @@ z.shouldNotEqual(3);
 ----
 +/
 void shouldNotEqual(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
+	import std.string : format;
+	import std.array : replace;
+	import core.exception : AssertError;
+
 	if (a == b) {
 		if (! message) {
 			message = "<%s> expected to NOT equal <%s>.".format(a, b);
@@ -154,6 +157,10 @@ z.shouldBeNull();
 ----
 +/
 void shouldBeNull(T)(T a, string message=null, string file=__FILE__, size_t line=__LINE__) {
+	import std.string : format;
+	import std.array : replace;
+	import core.exception : AssertError;
+
 	if (a !is null) {
 		if (! message) {
 			message = "expected to be <null>.";
@@ -197,6 +204,8 @@ z.shouldNotBeNull();
 ----
 +/
 void shouldNotBeNull(T)(T a, string message=null, string file=__FILE__, size_t line=__LINE__) {
+	import core.exception : AssertError;
+
 	if (a is null) {
 		if (! message) {
 			message = "expected to NOT be <null>.";
@@ -239,6 +248,10 @@ Examples:
 ----
 +/
 void shouldBeIn(T, U)(T value, U[] valid_values, string file=__FILE__, size_t line=__LINE__) {
+	import std.string : format;
+	import std.array : replace, join;
+	import core.exception : AssertError;
+
 	bool is_valid = false;
 
 	foreach (valid; valid_values) {
@@ -287,6 +300,10 @@ Examples:
 ----
 +/
 void shouldBeGreater(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
+	import std.string : format;
+	import std.array : replace;
+	import core.exception : AssertError;
+
 	if (a <= b) {
 		if (! message) {
 			message = "<%s> expected to be greater than <%s>.".format(a, b);
@@ -329,6 +346,10 @@ Examples:
 ----
 +/
 void shouldBeLess(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
+	import std.string : format;
+	import std.array : replace;
+	import core.exception : AssertError;
+
 	if (a >= b) {
 		if (! message) {
 			message = "<%s> expected to be less than <%s>.".format(a, b);
@@ -371,6 +392,10 @@ Examples:
 ----
 +/
 void shouldBeGreaterOrEqual(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
+	import std.string : format;
+	import std.array : replace;
+	import core.exception : AssertError;
+
 	if (a < b) {
 		if (! message) {
 			message = "<%s> expected to be greater or equal to <%s>.".format(a, b);
@@ -416,6 +441,10 @@ Examples:
 ----
 +/
 void shouldBeLessOrEqual(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
+	import std.string : format;
+	import std.array : replace;
+	import core.exception : AssertError;
+
 	if (a > b) {
 		if (! message) {
 			message = "<%s> expected to be less or equal to <%s>.".format(a, b);
@@ -478,6 +507,8 @@ shouldThrow(delegate() {
 ----
 +/
 void shouldThrow(void delegate() cb, string message=null, string file=__FILE__, size_t line=__LINE__) {
+	import core.exception : AssertError;
+
 	bool has_thrown = false;
 	try {
 		cb();
@@ -553,6 +584,8 @@ math#subtract
 ----
 +/
 int printResults() {
+	import std.stdio : stdout;
+
 	stdout.writeln("Unit Test Results:");
 	stdout.writefln("%d total, %d successful, %d failed", _success_count + _fail_count, _success_count, _fail_count);
 
@@ -640,6 +673,8 @@ private void addSuccess() {
 }
 
 private void addFail(string describe_message, TestPair pair, Throwable err) {
+	import std.string : format;
+
 	_fail_messages[describe_message] ~= `"%s: %s" %s(%s)`.format(pair.it_message, err.msg, err.file, err.line);
 	_fail_count++;
 }
