@@ -2,7 +2,7 @@
 	"name": "bdd",
 	"description": "Behavior Driven Development for the D programming language",
 	"authors": [
-		"Matthew Brennan Jones <matthew.brennan.jones@gmail.com>",
+		"Matthew Brennan Jones <matthew.brennan.jones@gmail.com>"
 	],
 	"homepage": "https://github.com/workhorsy/BDD",
 	"copyright": "Copyright (c) 2017-2018 Matthew Brennan Jones",
@@ -16,7 +16,7 @@
 			"targetName": "bdd",
 			"targetType": "staticLibrary",
 			"dependencies": {
-			},
+			}
 		},
 		{
 			"name": "unittest",
@@ -24,7 +24,7 @@
 			"targetType": "executable",
 			"mainSourceFile": "test/main.d",
 			"dependencies": {
-			},
-		},
-	],
+			}
+		}
+	]
 }
