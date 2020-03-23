@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2018 Matthew Brennan Jones <matthew.brennan.jones@gmail.com>
+// Copyright (c) 2017-2020 Matthew Brennan Jones <matthew.brennan.jones@gmail.com>
 // Boost Software License - Version 1.0
 // Behavior Driven Development for the D programming language
 // https://github.com/workhorsy/BDD
@@ -50,6 +50,7 @@ Used to assert that one value is equal to another value.
 Params:
  a = The value to test.
  b = The value it should be equal to.
+ message = The custom message to display instead of default.
  file = The file name that the assert failed in. Should be left as default.
  line = The file line that the assert failed in. Should be left as default.
 
@@ -97,6 +98,7 @@ Used to assert that one value is NOT equal to another value.
 Params:
  a = The value to test.
  b = The value it should NOT be equal to.
+ message = The custom message to display instead of default.
  file = The file name that the assert failed in. Should be left as default.
  line = The file line that the assert failed in. Should be left as default.
 
@@ -143,6 +145,7 @@ Used to assert that one value is equal to null.
 
 Params:
  a = The value that should equal null.
+ message = The custom message to display instead of default.
  file = The file name that the assert failed in. Should be left as default.
  line = The file line that the assert failed in. Should be left as default.
 
@@ -190,6 +193,7 @@ Used to assert that one value is NOT equal to null.
 
 Params:
  a = The value that should NOT equal null.
+ message = The custom message to display instead of default.
  file = The file name that the assert failed in. Should be left as default.
  line = The file line that the assert failed in. Should be left as default.
 
@@ -286,6 +290,7 @@ Used to assert that one value is greater than another value.
 Params:
  a = The value to test.
  b = The value it should be greater than.
+ message = The custom message to display instead of default.
  file = The file name that the assert failed in. Should be left as default.
  line = The file line that the assert failed in. Should be left as default.
 
@@ -332,6 +337,7 @@ Used to assert that one value is less than another value.
 Params:
  a = The value to test.
  b = The value it should be less than.
+ message = The custom message to display instead of default.
  file = The file name that the assert failed in. Should be left as default.
  line = The file line that the assert failed in. Should be left as default.
 
@@ -378,6 +384,7 @@ Used to assert that one value is greater or equal than another value.
 Params:
  a = The value to test.
  b = The value it should be greater or equal than.
+ message = The custom message to display instead of default.
  file = The file name that the assert failed in. Should be left as default.
  line = The file line that the assert failed in. Should be left as default.
 
@@ -427,6 +434,7 @@ Used to assert that one value is less or equal than another value.
 Params:
  a = The value to test.
  b = The value it should be less or equal than.
+ message = The custom message to display instead of default.
  file = The file name that the assert failed in. Should be left as default.
  line = The file line that the assert failed in. Should be left as default.
 
