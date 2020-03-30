@@ -9,20 +9,18 @@
 	"license": "BSL-1.0",
 	"importPaths": ["source/"],
 	"targetPath": "lib",
+	"targetType": "staticLibrary",
 
 	"configurations": [
 		{
 			"name": "default",
 			"targetName": "bdd",
-			"targetType": "staticLibrary",
 			"dependencies": {
 			}
 		},
 		{
 			"name": "unittest",
 			"targetName": "bdd-test",
-			"targetType": "executable",
-			"mainSourceFile": "test/main.d",
 			"dependencies": {
 			}
 		}

@@ -33,15 +33,54 @@ unittest {
 	);
 }
 
-// Prints the results of the tests
-int main() {
-	return BDD.printResults();
-}
 ----
 +/
 
 
 module BDD;
+
+
+// Runs all the modules unit tests
+shared static this() {
+	import core.runtime : Runtime;
+	import std.algorithm : filter;
+	import std.array : array;
+	import std.stdio : stdout;
+
+	version (unittest) {
+		Runtime.moduleUnitTester = () {
+			// Get all the modules
+			ModuleInfo*[] modules;
+			foreach (m; ModuleInfo) {
+				modules ~= m;
+			}
+
+			// Only get the modules that have unit tests
+			modules = modules.filter!(m => m && m.unitTest).array();
+
+			// Run all the tests
+			foreach (m; modules) {
+//				stdout.writefln("test module: %s", m.name); stdout.flush();
+				m.unitTest()();
+			}
+
+			// Print the results
+			stdout.writeln("Unit Test Results:"); stdout.flush();
+			stdout.writefln("%d total, %d successful, %d failed", _success_count + _fail_count, _success_count, _fail_count); stdout.flush();
+
+			foreach (a, b; _fail_messages) {
+				stdout.writefln("%s", a); stdout.flush();
+				foreach (c; b) {
+					stdout.writefln("- %s", c); stdout.flush();
+				}
+			}
+
+			// Return result
+			bool did_succeed = _fail_count <= 0;
+			return did_succeed;
+		};
+	}
+}
 
 
 /++
@@ -572,40 +611,6 @@ void afterIt(void delegate() cb) {
 	_after_it = cb;
 }
 
-
-/++
-Prints the results of all the tests. Returns 0 if all tests pass, or 1 if any fail.
-
-Examples:
-----
-	BDD.printResults();
-----
-
-Output:
-----
-Unit Test Results:
-4 total, 2 successful, 2 failed
-math#add
-- "5 + 7 = 12: <12> expected to equal <123>." broken_math.d(2)
-math#subtract
-- "5 - 7 = -2: <-2> expected to equal <456>." broken_math.d(6)
-----
-+/
-int printResults() {
-	import std.stdio : stdout;
-
-	stdout.writeln("Unit Test Results:");
-	stdout.writefln("%d total, %d successful, %d failed", _success_count + _fail_count, _success_count, _fail_count);
-
-	foreach (a, b; _fail_messages) {
-		stdout.writefln("%s", a);
-		foreach (c; b) {
-			stdout.writefln("- %s", c);
-		}
-	}
-
-	return _fail_count > 0;
-}
 
 /++
 The message is usually the name of the thing being tested.
