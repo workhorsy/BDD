@@ -47,39 +47,37 @@ shared static this() {
 	import std.array : array;
 	import std.stdio : stdout;
 
-	version (unittest) {
-		Runtime.moduleUnitTester = () {
-			// Get all the modules
-			ModuleInfo*[] modules;
-			foreach (m; ModuleInfo) {
-				modules ~= m;
+	Runtime.moduleUnitTester = () {
+		// Get all the modules
+		ModuleInfo*[] modules;
+		foreach (m; ModuleInfo) {
+			modules ~= m;
+		}
+
+		// Only get the modules that have unit tests
+		modules = modules.filter!(m => m && m.unitTest).array();
+
+		// Run all the tests
+		foreach (m; modules) {
+//			stdout.writefln("test module: %s", m.name); stdout.flush();
+			m.unitTest()();
+		}
+
+		// Print the results
+		stdout.writeln("Unit Test Results:"); stdout.flush();
+		stdout.writefln("%d total, %d successful, %d failed", _success_count + _fail_count, _success_count, _fail_count); stdout.flush();
+
+		foreach (a, b; _fail_messages) {
+			stdout.writefln("%s", a); stdout.flush();
+			foreach (c; b) {
+				stdout.writefln("- %s", c); stdout.flush();
 			}
+		}
 
-			// Only get the modules that have unit tests
-			modules = modules.filter!(m => m && m.unitTest).array();
-
-			// Run all the tests
-			foreach (m; modules) {
-//				stdout.writefln("test module: %s", m.name); stdout.flush();
-				m.unitTest()();
-			}
-
-			// Print the results
-			stdout.writeln("Unit Test Results:"); stdout.flush();
-			stdout.writefln("%d total, %d successful, %d failed", _success_count + _fail_count, _success_count, _fail_count); stdout.flush();
-
-			foreach (a, b; _fail_messages) {
-				stdout.writefln("%s", a); stdout.flush();
-				foreach (c; b) {
-					stdout.writefln("- %s", c); stdout.flush();
-				}
-			}
-
-			// Return result
-			bool did_succeed = _fail_count <= 0;
-			return did_succeed;
-		};
-	}
+		// Return result
+		bool did_succeed = _fail_count <= 0;
+		return did_succeed;
+	};
 }
 
 

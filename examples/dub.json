@@ -16,8 +16,9 @@
 
 			"excludedSourceFiles": ["source/main.d"],
 
-			"sourceFiles": ["../source/BDD.d"],
-			"importPaths": ["../source/"]
+			"dependencies": {
+				"bdd": {"path": "../../BDD/"}
+			}
 		}
 	]
 }
