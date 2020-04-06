@@ -1,0 +1,24 @@
+{
+	"name": "example",
+
+	"configurations": [
+		{
+			"name": "default",
+			"targetName": "example",
+			"targetType": "executable",
+
+			"mainSourceFile": "source/main.d"
+		},
+		{
+			"name": "unittest",
+			"targetName": "example-test",
+			"targetType": "staticLibrary",
+
+			"excludedSourceFiles": ["source/main.d"],
+
+			"dependencies": {
+				"bdd": {"path": "../../BDD/"}
+			}
+		}
+	]
+}

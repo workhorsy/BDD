@@ -3,3 +3,9 @@ dub.selections.json
 lib/
 *.o
 *.obj
+*.lib
+*.exe
+
+
+examples/example-test-unittest
+examples/example
