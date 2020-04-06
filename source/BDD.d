@@ -9,7 +9,7 @@ Behavior Driven Development for the D programming language
 Home page:
 $(LINK https://github.com/workhorsy/BDD)
 
-Version: 1.3.0
+Version: 2.0.0
 
 License:
 Boost Software License - Version 1.0
