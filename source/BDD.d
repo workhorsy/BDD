@@ -674,27 +674,29 @@ void afterIt(void delegate() cb) {
 	_after_it = cb;
 }
 
-private struct TestPair {
+private:
+
+struct TestPair {
 	string it_message;
 	void delegate() func;
 }
 
-private void addSuccess() {
+void addSuccess() {
 	_success_count++;
 }
 
-private void addFail(string describe_message, TestPair pair, Throwable err) {
+void addFail(string describe_message, TestPair pair, Throwable err) {
 	import std.string : format;
 
 	_fail_messages[describe_message] ~= `"%s: %s" %s(%s)`.format(pair.it_message, err.msg, err.file, err.line);
 	_fail_count++;
 }
 
-private string[][string] _fail_messages;
-private ulong _fail_count;
-private ulong _success_count;
-private void delegate() _before_it;
-private void delegate() _after_it;
+string[][string] _fail_messages;
+ulong _fail_count;
+ulong _success_count;
+void delegate() _before_it;
+void delegate() _after_it;
 
 /*
 	TODO:
