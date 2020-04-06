@@ -4,6 +4,11 @@ set -e
 
 VERSION="2.0.0"
 
+# Change dir to this scripts directory
+script_dir=$(dirname $0)
+cd $script_dir
+
+# Generate readme
 cd ..
 sed 's/$VERSION/'$VERSION'/g' tools/README.template.md > README.md
 
