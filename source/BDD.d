@@ -601,14 +601,6 @@ unittest {
 	);
 }
 
-void beforeIt(void delegate() cb) {
-	_before_it = cb;
-}
-
-void afterIt(void delegate() cb) {
-	_after_it = cb;
-}
-
 
 /++
 The message is usually the name of the thing being tested.
@@ -672,6 +664,14 @@ TestPair it(string message, void delegate() func) {
 	retval.func = func;
 
 	return retval;
+}
+
+void beforeIt(void delegate() cb) {
+	_before_it = cb;
+}
+
+void afterIt(void delegate() cb) {
+	_after_it = cb;
 }
 
 private struct TestPair {
