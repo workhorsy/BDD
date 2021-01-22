@@ -24,6 +24,12 @@ int add(int a, int b) {
 
 unittest {
 	describe("math#add",
+		before(delegate() {
+
+		}),
+		after(delegate() {
+
+		}),
 		it("Should add positive numbers", delegate() {
 			add(5, 7).shouldEqual(12);
 		}),
@@ -36,6 +42,17 @@ unittest {
 ----
 +/
 
+
+/* FIXME:
+. Rename BeforePair to BeforeFunc, AfterPair to AfterFunc, and TestPair to TestFunc
+. Rename pairs to funcs and pair to func
+. Add docs for before, after, and 4 different describe functions
+. Added the functions shouldHaveKey shouldNotHaveKey
+
+. Test that if before() throws, the it() WONT run, and the after() WILL run
+. Test that if it() throws, after() WILL run
+. Test that if
+*/
 
 module BDD;
 
@@ -689,6 +706,118 @@ unittest {
 	);
 }
 
+/++
+FIXME
++/
+void describe(string describe_message, BeforePair before, TestPair[] pairs ...) {
+	describe(describe_message, before, AfterPair.init, pairs);
+}
+
+unittest {
+	int before_counter = 0;
+
+	describe("BDD#before",
+		before(delegate() {
+			before_counter++;
+		}),
+		it("Should call before", delegate() {
+			before_counter.shouldEqual(1);
+		}),
+		it("Should call before again", delegate() {
+			before_counter.shouldEqual(2);
+		})
+	);
+}
+
+/++
+FIXME
++/
+void describe(string describe_message, AfterPair after, TestPair[] pairs ...) {
+	describe(describe_message, BeforePair.init, after, pairs);
+}
+
+unittest {
+	int after_counter = 0;
+
+	describe("BDD#after",
+		after(delegate() {
+			after_counter++;
+		}),
+		it("Should call after", delegate() {
+			after_counter.shouldEqual(0);
+		}),
+		it("Should call after again", delegate() {
+			after_counter.shouldEqual(1);
+		})
+	);
+}
+
+/++
+FIXME
++/
+void describe(string describe_message, BeforePair before, AfterPair after, TestPair[] pairs ...) {
+	foreach (TestPair pair; pairs) {
+		try {
+			if (before != BeforePair.init) {
+				before.func();
+			}
+
+			pair.func();
+
+			addSuccess();
+		} catch (Throwable ex) {
+			addFail(describe_message, pair, ex);
+		} finally {
+			if (after != AfterPair.init) {
+				after.func();
+			}
+		}
+	}
+}
+
+unittest {
+	int before_counter = 0;
+	int after_counter = 0;
+
+	describe("BDD#before_and_after",
+		before(delegate() {
+			before_counter++;
+		}),
+		after(delegate() {
+			after_counter++;
+		}),
+		it("Should call after", delegate() {
+			before_counter.shouldEqual(1);
+			after_counter.shouldEqual(0);
+		}),
+		it("Should call after again", delegate() {
+			before_counter.shouldEqual(2);
+			after_counter.shouldEqual(1);
+		})
+	);
+}
+
+unittest {
+	int before_counter = 0;
+	int after_counter = 0;
+
+	describe("BDD#before_throw",
+		before(delegate() {
+			throw new Exception("Before function is throwing!");
+		}),
+		after(delegate() {
+			after_counter++;
+		}),
+		it("Should call after", delegate() {
+			before_counter.shouldEqual(1);
+			after_counter.shouldEqual(0);
+		}),
+		it("Should call after again", delegate() {
+			before_counter.shouldEqual(2);
+			after_counter.shouldEqual(1);
+		})
+	);
+}
 
 /++
 The message is usually the name of the thing being tested.
@@ -706,25 +835,10 @@ Examples:
 	);
 ----
 +/
-void describe(TestPair...)(string describe_message, TestPair pairs) {
-	foreach (pair; pairs) {
-		try {
-			if (_before_it) {
-				_before_it();
-			}
-
-			pair.func();
-
-			if (_after_it) {
-				_after_it();
-			}
-
-			addSuccess();
-		} catch (Throwable ex) {
-			addFail(describe_message, pair, ex);
-		}
-	}
+void describe(string describe_message, TestPair[] pairs ...) {
+	describe(describe_message, BeforePair.init, AfterPair.init, pairs);
 }
+
 
 /++
 The message should describe what the test should do.
@@ -754,15 +868,29 @@ TestPair it(string message, void delegate() func) {
 	return retval;
 }
 
-void beforeIt(void delegate() cb) {
-	_before_it = cb;
+BeforePair before(void delegate() func) {
+	BeforePair retval;
+	retval.func = func;
+
+	return retval;
 }
 
-void afterIt(void delegate() cb) {
-	_after_it = cb;
+AfterPair after(void delegate() func) {
+	AfterPair retval;
+	retval.func = func;
+
+	return retval;
 }
 
 private:
+
+struct BeforePair {
+	void delegate() func;
+}
+
+struct AfterPair {
+	void delegate() func;
+}
 
 struct TestPair {
 	string it_message;
@@ -783,8 +911,6 @@ void addFail(string describe_message, TestPair pair, Throwable err) {
 string[][string] _fail_messages;
 ulong _fail_count;
 ulong _success_count;
-void delegate() _before_it;
-void delegate() _after_it;
 
 /*
 	TODO:
