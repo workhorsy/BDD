@@ -44,7 +44,6 @@ unittest {
 
 
 /* FIXME:
-. Rename BeforePair to BeforeFunc, AfterPair to AfterFunc, and TestPair to TestFunc
 . Rename pairs to funcs and pair to func
 . Add docs for before, after, and 4 different describe functions
 . Added the functions shouldHaveKey shouldNotHaveKey
@@ -705,8 +704,8 @@ unittest {
 /++
 FIXME
 +/
-void describe(string describe_message, BeforePair before, TestPair[] pairs ...) {
-	describe(describe_message, before, AfterPair.init, pairs);
+void describe(string describe_message, BeforeFunc before, TestFunc[] pairs ...) {
+	describe(describe_message, before, AfterFunc.init, pairs);
 }
 
 unittest {
@@ -728,8 +727,8 @@ unittest {
 /++
 FIXME
 +/
-void describe(string describe_message, AfterPair after, TestPair[] pairs ...) {
-	describe(describe_message, BeforePair.init, after, pairs);
+void describe(string describe_message, AfterFunc after, TestFunc[] pairs ...) {
+	describe(describe_message, BeforeFunc.init, after, pairs);
 }
 
 unittest {
@@ -751,12 +750,12 @@ unittest {
 /++
 FIXME
 +/
-void describe(string describe_message, BeforePair before, AfterPair after, TestPair[] pairs ...) {
-	foreach (TestPair pair; pairs) {
+void describe(string describe_message, BeforeFunc before, AfterFunc after, TestFunc[] pairs ...) {
+	foreach (TestFunc pair; pairs) {
 		// Run before function
 		bool before_threw = false;
 		try {
-			if (before != BeforePair.init) {
+			if (before != BeforeFunc.init) {
 				before.func();
 			}
 		} catch (Throwable ex) {
@@ -776,7 +775,7 @@ void describe(string describe_message, BeforePair before, AfterPair after, TestP
 
 		// Run after function
 		try {
-			if (after != AfterPair.init) {
+			if (after != AfterFunc.init) {
 				after.func();
 			}
 		} catch (Throwable ex) {
@@ -927,8 +926,8 @@ Examples:
 	);
 ----
 +/
-void describe(string describe_message, TestPair[] pairs ...) {
-	describe(describe_message, BeforePair.init, AfterPair.init, pairs);
+void describe(string describe_message, TestFunc[] pairs ...) {
+	describe(describe_message, BeforeFunc.init, AfterFunc.init, pairs);
 }
 
 
@@ -952,23 +951,23 @@ describe("example_library#a",
 );
 ----
 +/
-TestPair it(string message, void delegate() func) {
-	TestPair retval;
+TestFunc it(string message, void delegate() func) {
+	TestFunc retval;
 	retval.it_message = message;
 	retval.func = func;
 
 	return retval;
 }
 
-BeforePair before(void delegate() func) {
-	BeforePair retval;
+BeforeFunc before(void delegate() func) {
+	BeforeFunc retval;
 	retval.func = func;
 
 	return retval;
 }
 
-AfterPair after(void delegate() func) {
-	AfterPair retval;
+AfterFunc after(void delegate() func) {
+	AfterFunc retval;
 	retval.func = func;
 
 	return retval;
@@ -976,15 +975,15 @@ AfterPair after(void delegate() func) {
 
 private:
 
-struct BeforePair {
+struct BeforeFunc {
 	void delegate() func;
 }
 
-struct AfterPair {
+struct AfterFunc {
 	void delegate() func;
 }
 
-struct TestPair {
+struct TestFunc {
 	string it_message;
 	void delegate() func;
 }
@@ -993,7 +992,7 @@ void addSuccess() {
 	_success_count++;
 }
 
-void addFail(string describe_message, TestPair pair, Throwable err) {
+void addFail(string describe_message, TestFunc pair, Throwable err) {
 	import std.string : format;
 
 	if (_save_exceptions) {
