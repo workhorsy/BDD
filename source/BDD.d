@@ -637,6 +637,29 @@ unittest {
 
 			has_thrown.shouldEqual(true);
 		}),
+		it("Should succeed when a named exception is thrown", delegate() {
+			bool has_thrown = false;
+
+			shouldThrow(delegate() {
+				has_thrown = true;
+				throw new Exception("smack!");
+			}, "smack!");
+
+			has_thrown.shouldEqual(true);
+		}),
+		it("Should fail when a wrongly named exception is thrown", delegate() {
+			Throwable ex = null;
+			try {
+				shouldThrow(delegate() {
+					throw new Exception("Nooooooo!");
+				}, "Yeeeeeeeeeeesssss!");
+			} catch (Throwable exception) {
+				ex = exception;
+			}
+
+			ex.shouldNotBeNull();
+			ex.msg.shouldEqual("Exception was thrown. But expected: Yeeeeeeeeeeesssss!");
+		}),
 		it("Should fail when an exception is not thrown", delegate() {
 			Throwable ex = null;
 			try {
@@ -649,6 +672,19 @@ unittest {
 
 			ex.shouldNotBeNull();
 			ex.msg.shouldEqual("Exception was not thrown. Expected one.");
+		}),
+		it("Should fail when a named exception is not thrown", delegate() {
+			Throwable ex = null;
+			try {
+				shouldThrow(delegate() {
+					// Does not throw
+				}, "kapow!");
+			} catch (Throwable exception) {
+				ex = exception;
+			}
+
+			ex.shouldNotBeNull();
+			ex.msg.shouldEqual("Exception was not thrown. Expected: kapow!");
 		})
 	);
 }
