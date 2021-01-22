@@ -703,8 +703,8 @@ unittest {
 /++
 FIXME
 +/
-void describe(string describe_message, BeforeFunc before, TestFunc[] tests ...) {
-	describe(describe_message, before, AfterFunc.init, tests);
+void describe(string describe_message, BeforeFunc before, ItFunc[] its ...) {
+	describe(describe_message, before, AfterFunc.init, its);
 }
 
 unittest {
@@ -726,8 +726,8 @@ unittest {
 /++
 FIXME
 +/
-void describe(string describe_message, AfterFunc after, TestFunc[] tests ...) {
-	describe(describe_message, BeforeFunc.init, after, tests);
+void describe(string describe_message, AfterFunc after, ItFunc[] its ...) {
+	describe(describe_message, BeforeFunc.init, after, its);
 }
 
 unittest {
@@ -749,8 +749,8 @@ unittest {
 /++
 FIXME
 +/
-void describe(string describe_message, BeforeFunc before, AfterFunc after, TestFunc[] tests ...) {
-	foreach (TestFunc test; tests) {
+void describe(string describe_message, BeforeFunc before, AfterFunc after, ItFunc[] its ...) {
+	foreach (ItFunc it; its) {
 		// Run before function
 		bool before_threw = false;
 		try {
@@ -759,17 +759,17 @@ void describe(string describe_message, BeforeFunc before, AfterFunc after, TestF
 			}
 		} catch (Throwable ex) {
 			before_threw = true;
-			addFail(describe_message, test, ex);
+			addFail(describe_message, it, ex);
 		}
 
 		// Run it function
 		try {
 			if (! before_threw) {
-				test.func();
+				it.func();
 				addSuccess();
 			}
 		} catch (Throwable ex) {
-			addFail(describe_message, test, ex);
+			addFail(describe_message, it, ex);
 		}
 
 		// Run after function
@@ -778,7 +778,7 @@ void describe(string describe_message, BeforeFunc before, AfterFunc after, TestF
 				after.func();
 			}
 		} catch (Throwable ex) {
-			addFail(describe_message, test, ex);
+			addFail(describe_message, it, ex);
 		}
 	}
 }
@@ -925,8 +925,8 @@ Examples:
 	);
 ----
 +/
-void describe(string describe_message, TestFunc[] tests ...) {
-	describe(describe_message, BeforeFunc.init, AfterFunc.init, tests);
+void describe(string describe_message, ItFunc[] its ...) {
+	describe(describe_message, BeforeFunc.init, AfterFunc.init, its);
 }
 
 
@@ -950,8 +950,8 @@ describe("example_library#a",
 );
 ----
 +/
-TestFunc it(string message, void delegate() func) {
-	TestFunc retval;
+ItFunc it(string message, void delegate() func) {
+	ItFunc retval;
 	retval.it_message = message;
 	retval.func = func;
 
@@ -982,7 +982,7 @@ struct AfterFunc {
 	void delegate() func;
 }
 
-struct TestFunc {
+struct ItFunc {
 	string it_message;
 	void delegate() func;
 }
@@ -991,13 +991,13 @@ void addSuccess() {
 	_success_count++;
 }
 
-void addFail(string describe_message, TestFunc test, Throwable err) {
+void addFail(string describe_message, ItFunc it, Throwable err) {
 	import std.string : format;
 
 	if (_save_exceptions) {
 		_saved_exceptions ~= err;
 	} else {
-		_fail_messages[describe_message] ~= `"%s: %s" %s(%s)`.format(test.it_message, err.msg, err.file, err.line);
+		_fail_messages[describe_message] ~= `"%s: %s" %s(%s)`.format(it.it_message, err.msg, err.file, err.line);
 		_fail_count++;
 	}
 }
