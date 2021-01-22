@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2020 Matthew Brennan Jones <matthew.brennan.jones@gmail.com>
+// Copyright (c) 2017-2021 Matthew Brennan Jones <matthew.brennan.jones@gmail.com>
 // Boost Software License - Version 1.0
 // Behavior Driven Development for the D programming language
 // https://github.com/workhorsy/BDD
@@ -317,6 +317,58 @@ unittest {
 			shouldThrow(delegate() {
 				"qed".shouldBeIn(["abc", "xyz"]);
 			}, "<qed> is not in <[abc, xyz]>.");
+		})
+	);
+}
+
+/++
+Used to assert that one value is NOT in an array of specified values.
+
+Params:
+ value = The value to test.
+ valid_values = An array of valid values.
+ file = The file name that the assert failed in. Should be left as default.
+ line = The file line that the assert failed in. Should be left as default.
+
+Throws:
+ If the value is in the array, will throw an AssertError with the value
+ and array values.
+
+Examples:
+----
+// Will throw an exception like "AssertError@example.d(6): <Mark> is in <[Tim, Mark]>."
+"Mark".shouldNotBeIn(["Tim", "Mark"]);
+----
++/
+void shouldNotBeIn(T, U)(T value, U[] valid_values, string file=__FILE__, size_t line=__LINE__) {
+	import std.string : format;
+	import std.array : replace, join;
+	import core.exception : AssertError;
+
+	bool is_valid = true;
+
+	foreach (valid; valid_values) {
+		if (value == valid) {
+			is_valid = false;
+		}
+	}
+
+	if (! is_valid) {
+		string message = "<%s> is in <[%s]>.".format(value, valid_values.join(", "));
+		message = message.replace("\r", "\\r").replace("\n", "\\n");
+		throw new AssertError(message, file, line);
+	}
+}
+
+unittest {
+	describe("BDD#shouldNotBeIn",
+		it("Should succeed when the string is NOT in the array", delegate() {
+			"xxx".shouldNotBeIn(["abc", "xyz"]);
+		}),
+		it("Should fail when the string is in the array", delegate() {
+			shouldThrow(delegate() {
+				"abc".shouldNotBeIn(["abc", "xyz"]);
+			}, "<abc> is in <[abc, xyz]>.");
 		})
 	);
 }

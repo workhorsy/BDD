@@ -1,4 +1,7 @@
 
+* Release 3.0.0
+	* Fixed Bug #5: Add shouldNotBeIn function
+
 04/05/2020 Release 2.0.0
 	* Fixed Bug #4: Made tests run without main for changes in dmd 2.090
 	* Fixed Bug #1: Change more imports to be local and selective
