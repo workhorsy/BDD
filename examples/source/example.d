@@ -14,6 +14,12 @@ unittest {
 	import BDD;
 
 	describe("math#add",
+		before(delegate() {
+			stdout.writeln("Before called ...");
+		}),
+		after(delegate() {
+			stdout.writeln("After called ...");
+		}),
 		it("Should add positive numbers", delegate() {
 			add(5, 7).shouldEqual(12);
 		}),

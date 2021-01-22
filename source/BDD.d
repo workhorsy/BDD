@@ -757,20 +757,34 @@ FIXME
 +/
 void describe(string describe_message, BeforePair before, AfterPair after, TestPair[] pairs ...) {
 	foreach (TestPair pair; pairs) {
+		// Run before function
+		bool before_threw = false;
 		try {
 			if (before != BeforePair.init) {
 				before.func();
 			}
+		} catch (Throwable ex) {
+			before_threw = true;
+			addFail(describe_message, pair, ex);
+		}
 
-			pair.func();
-
-			addSuccess();
+		// Run it function
+		try {
+			if (! before_threw) {
+				pair.func();
+				addSuccess();
+			}
 		} catch (Throwable ex) {
 			addFail(describe_message, pair, ex);
-		} finally {
+		}
+
+		// Run after function
+		try {
 			if (after != AfterPair.init) {
 				after.func();
 			}
+		} catch (Throwable ex) {
+			addFail(describe_message, pair, ex);
 		}
 	}
 }
@@ -797,26 +811,108 @@ unittest {
 	);
 }
 
+// Should call before and after, even if before throws
 unittest {
-	int before_counter = 0;
-	int after_counter = 0;
+	int counter = 0;
+
+	startSavingExceptions();
 
 	describe("BDD#before_throw",
+		// Should run
 		before(delegate() {
+			counter++;
 			throw new Exception("Before function is throwing!");
 		}),
+		// Should run
 		after(delegate() {
-			after_counter++;
+			counter++;
 		}),
-		it("Should call after", delegate() {
-			before_counter.shouldEqual(1);
-			after_counter.shouldEqual(0);
+		// Should NOT run
+		it("Should inc counter", delegate() {
+			counter++;
 		}),
-		it("Should call after again", delegate() {
-			before_counter.shouldEqual(2);
-			after_counter.shouldEqual(1);
-		})
+		// Should NOT run
+		it("Should inc counter again", delegate() {
+			counter++;
+		}),
 	);
+
+	counter.shouldEqual(4);
+	_saved_exceptions.length.shouldEqual(2);
+	foreach (err ; _saved_exceptions) {
+		err.msg.shouldEqual("Before function is throwing!");
+	}
+
+	stopSavingExceptions();
+}
+
+// Should call everything, even if after throws
+unittest {
+	int counter = 0;
+
+	startSavingExceptions();
+
+	describe("BDD#after_throw",
+		// Should run
+		before(delegate() {
+			counter++;
+		}),
+		// Should run
+		after(delegate() {
+			counter++;
+			throw new Exception("After function is throwing!");
+		}),
+		// Should run
+		it("Should inc counter", delegate() {
+			counter++;
+		}),
+		// Should run
+		it("Should inc counter again", delegate() {
+			counter++;
+		}),
+	);
+
+	counter.shouldEqual(6);
+	_saved_exceptions.length.shouldEqual(2);
+	foreach (err ; _saved_exceptions) {
+		err.msg.shouldEqual("After function is throwing!");
+	}
+
+	stopSavingExceptions();
+}
+
+// Should call everything, even if it throws
+unittest {
+	int counter = 0;
+
+	startSavingExceptions();
+
+	describe("BDD#it_throw",
+		// Should run
+		before(delegate() {
+			counter++;
+		}),
+		// Should run
+		after(delegate() {
+			counter++;
+		}),
+		// Should run
+		it("Should throw", delegate() {
+			counter++;
+			throw new Exception("It function is throwing!");
+		}),
+		it("Should throw again", delegate() {
+			counter++;
+			throw new Exception("Other it function is throwing!");
+		}),
+	);
+
+	counter.shouldEqual(6);
+	_saved_exceptions.length.shouldEqual(2);
+	_saved_exceptions[0].msg.shouldEqual("It function is throwing!");
+	_saved_exceptions[1].msg.shouldEqual("Other it function is throwing!");
+
+	stopSavingExceptions();
 }
 
 /++
@@ -904,10 +1000,26 @@ void addSuccess() {
 void addFail(string describe_message, TestPair pair, Throwable err) {
 	import std.string : format;
 
-	_fail_messages[describe_message] ~= `"%s: %s" %s(%s)`.format(pair.it_message, err.msg, err.file, err.line);
-	_fail_count++;
+	if (_save_exceptions) {
+		_saved_exceptions ~= err;
+	} else {
+		_fail_messages[describe_message] ~= `"%s: %s" %s(%s)`.format(pair.it_message, err.msg, err.file, err.line);
+		_fail_count++;
+	}
 }
 
+void startSavingExceptions() {
+	_saved_exceptions = [];
+	_save_exceptions = true;
+}
+
+void stopSavingExceptions() {
+	_saved_exceptions = [];
+	_save_exceptions = false;
+}
+
+bool _save_exceptions = false;
+Throwable[] _saved_exceptions;
 string[][string] _fail_messages;
 ulong _fail_count;
 ulong _success_count;
