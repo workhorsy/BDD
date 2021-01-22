@@ -48,10 +48,6 @@ unittest {
 . Rename pairs to funcs and pair to func
 . Add docs for before, after, and 4 different describe functions
 . Added the functions shouldHaveKey shouldNotHaveKey
-
-. Test that if before() throws, the it() WONT run, and the after() WILL run
-. Test that if it() throws, after() WILL run
-. Test that if
 */
 
 module BDD;
