@@ -44,7 +44,6 @@ unittest {
 
 
 /* FIXME:
-. Rename pairs to funcs and pair to func
 . Add docs for before, after, and 4 different describe functions
 . Added the functions shouldHaveKey shouldNotHaveKey
 */
@@ -704,8 +703,8 @@ unittest {
 /++
 FIXME
 +/
-void describe(string describe_message, BeforeFunc before, TestFunc[] pairs ...) {
-	describe(describe_message, before, AfterFunc.init, pairs);
+void describe(string describe_message, BeforeFunc before, TestFunc[] tests ...) {
+	describe(describe_message, before, AfterFunc.init, tests);
 }
 
 unittest {
@@ -727,8 +726,8 @@ unittest {
 /++
 FIXME
 +/
-void describe(string describe_message, AfterFunc after, TestFunc[] pairs ...) {
-	describe(describe_message, BeforeFunc.init, after, pairs);
+void describe(string describe_message, AfterFunc after, TestFunc[] tests ...) {
+	describe(describe_message, BeforeFunc.init, after, tests);
 }
 
 unittest {
@@ -750,8 +749,8 @@ unittest {
 /++
 FIXME
 +/
-void describe(string describe_message, BeforeFunc before, AfterFunc after, TestFunc[] pairs ...) {
-	foreach (TestFunc pair; pairs) {
+void describe(string describe_message, BeforeFunc before, AfterFunc after, TestFunc[] tests ...) {
+	foreach (TestFunc test; tests) {
 		// Run before function
 		bool before_threw = false;
 		try {
@@ -760,17 +759,17 @@ void describe(string describe_message, BeforeFunc before, AfterFunc after, TestF
 			}
 		} catch (Throwable ex) {
 			before_threw = true;
-			addFail(describe_message, pair, ex);
+			addFail(describe_message, test, ex);
 		}
 
 		// Run it function
 		try {
 			if (! before_threw) {
-				pair.func();
+				test.func();
 				addSuccess();
 			}
 		} catch (Throwable ex) {
-			addFail(describe_message, pair, ex);
+			addFail(describe_message, test, ex);
 		}
 
 		// Run after function
@@ -779,7 +778,7 @@ void describe(string describe_message, BeforeFunc before, AfterFunc after, TestF
 				after.func();
 			}
 		} catch (Throwable ex) {
-			addFail(describe_message, pair, ex);
+			addFail(describe_message, test, ex);
 		}
 	}
 }
@@ -915,7 +914,7 @@ The message is usually the name of the thing being tested.
 
 Params:
  describe_message = The thing that is being described.
- pairs = All the 'it' delegate functions that will test the thing.
+ tests = All the 'it' delegate functions that will test the thing.
 
 Examples:
 ----
@@ -926,8 +925,8 @@ Examples:
 	);
 ----
 +/
-void describe(string describe_message, TestFunc[] pairs ...) {
-	describe(describe_message, BeforeFunc.init, AfterFunc.init, pairs);
+void describe(string describe_message, TestFunc[] tests ...) {
+	describe(describe_message, BeforeFunc.init, AfterFunc.init, tests);
 }
 
 
@@ -992,13 +991,13 @@ void addSuccess() {
 	_success_count++;
 }
 
-void addFail(string describe_message, TestFunc pair, Throwable err) {
+void addFail(string describe_message, TestFunc test, Throwable err) {
 	import std.string : format;
 
 	if (_save_exceptions) {
 		_saved_exceptions ~= err;
 	} else {
-		_fail_messages[describe_message] ~= `"%s: %s" %s(%s)`.format(pair.it_message, err.msg, err.file, err.line);
+		_fail_messages[describe_message] ~= `"%s: %s" %s(%s)`.format(test.it_message, err.msg, err.file, err.line);
 		_fail_count++;
 	}
 }
