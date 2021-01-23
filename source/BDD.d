@@ -611,6 +611,7 @@ shouldThrow(delegate() {
 +/
 void shouldThrow(void delegate() cb, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	import core.exception : AssertError;
+	import std.string : format;
 
 	bool has_thrown = false;
 	try {
@@ -618,13 +619,13 @@ void shouldThrow(void delegate() cb, string message=null, string file=__FILE__, 
 	} catch (Throwable ex) {
 		has_thrown = true;
 		if (message && message != ex.msg) {
-			throw new AssertError("Exception was thrown. But expected: " ~ message, file, line);
+			throw new AssertError("Exception was thrown. Expected <%s> but got <%s>".format(message, ex.msg), file, line);
 		}
 	}
 
 	if (! has_thrown) {
 		if (message) {
-			throw new AssertError("Exception was not thrown. Expected: " ~ message, file, line);
+			throw new AssertError("Exception was not thrown. Expected <%s>".format(message), file, line);
 		} else {
 			throw new AssertError("Exception was not thrown. Expected one.", file, line);
 		}
@@ -664,7 +665,7 @@ unittest {
 			}
 
 			ex.shouldNotBeNull();
-			ex.msg.shouldEqual("Exception was thrown. But expected: Yeeeeeeeeeeesssss!");
+			ex.msg.shouldEqual("Exception was thrown. Expected <Yeeeeeeeeeeesssss!> but got <Nooooooo!>");
 		}),
 		it("Should fail when an exception is not thrown", delegate() {
 			Throwable ex = null;
@@ -690,7 +691,7 @@ unittest {
 			}
 
 			ex.shouldNotBeNull();
-			ex.msg.shouldEqual("Exception was not thrown. Expected: kapow!");
+			ex.msg.shouldEqual("Exception was not thrown. Expected <kapow!>");
 		})
 	);
 }
