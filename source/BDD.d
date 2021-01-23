@@ -24,6 +24,12 @@ int add(int a, int b) {
 
 unittest {
 	describe("math#add",
+		before(delegate() {
+
+		}),
+		after(delegate() {
+
+		}),
 		it("Should add positive numbers", delegate() {
 			add(5, 7).shouldEqual(12);
 		}),
@@ -689,39 +695,137 @@ unittest {
 	);
 }
 
-
 /++
-The message is usually the name of the thing being tested.
+Used to describe the thing being tested. Contains many 'it' functions to
+test the thing.
 
 Params:
  describe_message = The thing that is being described.
- pairs = All the 'it' delegate functions that will test the thing.
+ its = All the 'it' functions that will test the thing.
 
 Examples:
 ----
 	describe("example_library#thing_to_test",
 		it("Should NOT fail", delegate() {
-			// code here
+			// test code here
 		})
 	);
 ----
 +/
-void describe(TestPair...)(string describe_message, TestPair pairs) {
-	foreach (pair; pairs) {
+void describe(string describe_message, ItFunc[] its ...) {
+	describe(describe_message, BeforeFunc.init, AfterFunc.init, its);
+}
+
+/++
+Used to describe the thing being tested. Contains many 'it' functions to
+test the thing. Also takes a function to run before each test.
+
+Params:
+ describe_message = The thing that is being described.
+ before = The function that will run before each 'it' function. If the before
+function fails, the 'it' function will not be run.
+ its = All the 'it' functions that will test the thing.
+
+Examples:
+----
+	describe("example_library#thing_to_test",
+		before(delegate() {
+			// setup code here
+		}),
+		it("Should NOT fail", delegate() {
+			// test code here
+		})
+	);
+----
++/
+void describe(string describe_message, BeforeFunc before, ItFunc[] its ...) {
+	describe(describe_message, before, AfterFunc.init, its);
+}
+
+/++
+Used to describe the thing being tested. Contains many 'it' functions to
+test the thing. Also takes a function to run after each test.
+
+Params:
+ describe_message = The thing that is being described.
+ after = The function that will run after each 'it' function. Will alwasy run,
+even if the 'before' or 'it' function failed.
+ its = All the 'it' functions that will test the thing.
+
+Examples:
+----
+	describe("example_library#thing_to_test",
+		after(delegate() {
+			// tear down code here
+		}),
+		it("Should NOT fail", delegate() {
+			// test code here
+		})
+	);
+----
++/
+void describe(string describe_message, AfterFunc after, ItFunc[] its ...) {
+	describe(describe_message, BeforeFunc.init, after, its);
+}
+
+/++
+Used to describe the thing being tested. Contains many 'it' functions to
+test the thing. Also takes a function to run before, and a function to
+run after each test.
+
+Params:
+ describe_message = The thing that is being described.
+ before = The function that will run before each 'it' function. If the before
+function fails, the 'it' function will not be run.
+ after = The function that will run after each 'it' function. Will alwasy run,
+even if the 'before' or 'it' function failed.
+ its = All the 'it' functions that will test the thing.
+
+Examples:
+----
+	describe("example_library#thing_to_test",
+		before(delegate() {
+			// setup code here
+		}),
+		after(delegate() {
+			// tear down code here
+		}),
+		it("Should NOT fail", delegate() {
+			// test code here
+		})
+	);
+----
++/
+void describe(string describe_message, BeforeFunc before, AfterFunc after, ItFunc[] its ...) {
+	foreach (ItFunc it; its) {
+		// Run before function
+		bool before_threw = false;
 		try {
-			if (_before_it) {
-				_before_it();
+			if (before != BeforeFunc.init) {
+				before.func();
 			}
-
-			pair.func();
-
-			if (_after_it) {
-				_after_it();
-			}
-
-			addSuccess();
 		} catch (Throwable ex) {
-			addFail(describe_message, pair, ex);
+			before_threw = true;
+			addFail(describe_message, it, ex);
+		}
+
+		// Run it function
+		try {
+			if (! before_threw) {
+				it.func();
+				addSuccess();
+			}
+		} catch (Throwable ex) {
+			addFail(describe_message, it, ex);
+		}
+
+		// Run after function
+		try {
+			if (after != AfterFunc.init) {
+				after.func();
+			}
+		} catch (Throwable ex) {
+			addFail(describe_message, it, ex);
 		}
 	}
 }
@@ -746,25 +850,250 @@ describe("example_library#a",
 );
 ----
 +/
-TestPair it(string message, void delegate() func) {
-	TestPair retval;
+ItFunc it(string message, void delegate() func) {
+	ItFunc retval;
 	retval.it_message = message;
 	retval.func = func;
 
 	return retval;
 }
 
-void beforeIt(void delegate() cb) {
-	_before_it = cb;
+unittest {
+	int counter = 0;
+
+	describe("BDD#it",
+		it("Should inc counter", delegate() {
+			counter++;
+		}),
+		it("Should inc counter again", delegate() {
+			counter++;
+		})
+	);
+
+	counter.shouldEqual(2);
 }
 
-void afterIt(void delegate() cb) {
-	_after_it = cb;
+// Should call everything, even if it throws
+unittest {
+	int counter = 0;
+
+	startSavingExceptions();
+
+	describe("BDD#it_throw",
+		// Should run
+		before(delegate() {
+			counter++;
+		}),
+		// Should run
+		after(delegate() {
+			counter++;
+		}),
+		// Should run
+		it("Should throw", delegate() {
+			counter++;
+			throw new Exception("It function is throwing!");
+		}),
+		it("Should throw again", delegate() {
+			counter++;
+			throw new Exception("Other it function is throwing!");
+		}),
+	);
+
+	counter.shouldEqual(6);
+	_saved_exceptions.length.shouldEqual(2);
+	_saved_exceptions[0].msg.shouldEqual("It function is throwing!");
+	_saved_exceptions[1].msg.shouldEqual("Other it function is throwing!");
+
+	stopSavingExceptions();
+}
+
+/++
+The function to call before each 'it' function.
+
+Params:
+ func = The function to call before running each test.
+
+Examples:
+----
+int a = 4;
+describe("example_library#a",
+	before(delegate() {
+		a.shouldEqual(4);
+	}),
+	it("Should test more things", delegate() {
+		//
+	})
+);
+----
++/
+BeforeFunc before(void delegate() func) {
+	BeforeFunc retval;
+	retval.func = func;
+
+	return retval;
+}
+
+unittest {
+	int before_counter = 0;
+
+	describe("BDD#before",
+		before(delegate() {
+			before_counter++;
+		}),
+		it("Should call before", delegate() {
+			before_counter.shouldEqual(1);
+		}),
+		it("Should call before again", delegate() {
+			before_counter.shouldEqual(2);
+		})
+	);
+}
+
+// Should call before and after, even if before throws
+unittest {
+	int counter = 0;
+
+	startSavingExceptions();
+
+	describe("BDD#before_throw",
+		// Should run
+		before(delegate() {
+			counter++;
+			throw new Exception("Before function is throwing!");
+		}),
+		// Should run
+		after(delegate() {
+			counter++;
+		}),
+		// Should NOT run
+		it("Should inc counter", delegate() {
+			counter++;
+		}),
+		// Should NOT run
+		it("Should inc counter again", delegate() {
+			counter++;
+		}),
+	);
+
+	counter.shouldEqual(4);
+	_saved_exceptions.length.shouldEqual(2);
+	foreach (err ; _saved_exceptions) {
+		err.msg.shouldEqual("Before function is throwing!");
+	}
+
+	stopSavingExceptions();
+}
+
+/++
+The function to call after each 'it' function.
+
+Params:
+ func = The function to call after running each test.
+
+Examples:
+----
+int a = 4;
+describe("example_library#a",
+	after(delegate() {
+		a.shouldEqual(4);
+	}),
+	it("Should test more things", delegate() {
+		//
+	})
+);
+----
++/
+AfterFunc after(void delegate() func) {
+	AfterFunc retval;
+	retval.func = func;
+
+	return retval;
+}
+
+unittest {
+	int after_counter = 0;
+
+	describe("BDD#after",
+		after(delegate() {
+			after_counter++;
+		}),
+		it("Should call after", delegate() {
+			after_counter.shouldEqual(0);
+		}),
+		it("Should call after again", delegate() {
+			after_counter.shouldEqual(1);
+		})
+	);
+}
+
+// Should call everything, even if after throws
+unittest {
+	int counter = 0;
+
+	startSavingExceptions();
+
+	describe("BDD#after_throw",
+		// Should run
+		before(delegate() {
+			counter++;
+		}),
+		// Should run
+		after(delegate() {
+			counter++;
+			throw new Exception("After function is throwing!");
+		}),
+		// Should run
+		it("Should inc counter", delegate() {
+			counter++;
+		}),
+		// Should run
+		it("Should inc counter again", delegate() {
+			counter++;
+		}),
+	);
+
+	counter.shouldEqual(6);
+	_saved_exceptions.length.shouldEqual(2);
+	foreach (err ; _saved_exceptions) {
+		err.msg.shouldEqual("After function is throwing!");
+	}
+
+	stopSavingExceptions();
+}
+
+unittest {
+	int before_counter = 0;
+	int after_counter = 0;
+
+	describe("BDD#before_and_after",
+		before(delegate() {
+			before_counter++;
+		}),
+		after(delegate() {
+			after_counter++;
+		}),
+		it("Should call after", delegate() {
+			before_counter.shouldEqual(1);
+			after_counter.shouldEqual(0);
+		}),
+		it("Should call after again", delegate() {
+			before_counter.shouldEqual(2);
+			after_counter.shouldEqual(1);
+		})
+	);
 }
 
 private:
 
-struct TestPair {
+struct BeforeFunc {
+	void delegate() func;
+}
+
+struct AfterFunc {
+	void delegate() func;
+}
+
+struct ItFunc {
 	string it_message;
 	void delegate() func;
 }
@@ -773,18 +1102,32 @@ void addSuccess() {
 	_success_count++;
 }
 
-void addFail(string describe_message, TestPair pair, Throwable err) {
+void addFail(string describe_message, ItFunc it, Throwable err) {
 	import std.string : format;
 
-	_fail_messages[describe_message] ~= `"%s: %s" %s(%s)`.format(pair.it_message, err.msg, err.file, err.line);
-	_fail_count++;
+	if (_save_exceptions) {
+		_saved_exceptions ~= err;
+	} else {
+		_fail_messages[describe_message] ~= `"%s: %s" %s(%s)`.format(it.it_message, err.msg, err.file, err.line);
+		_fail_count++;
+	}
 }
 
+void startSavingExceptions() {
+	_saved_exceptions = [];
+	_save_exceptions = true;
+}
+
+void stopSavingExceptions() {
+	_saved_exceptions = [];
+	_save_exceptions = false;
+}
+
+bool _save_exceptions = false;
+Throwable[] _saved_exceptions;
 string[][string] _fail_messages;
 ulong _fail_count;
 ulong _success_count;
-void delegate() _before_it;
-void delegate() _after_it;
 
 /*
 	TODO:
