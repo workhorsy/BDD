@@ -1,5 +1,6 @@
 
 * Release 3.0.0
+	* Fixed Bug #6: Add functions that run before and after tests
 	* Fixed Bug #5: Add shouldNotBeIn function
 
 04/05/2020 Release 2.0.0
