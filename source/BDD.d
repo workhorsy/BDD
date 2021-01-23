@@ -43,11 +43,6 @@ unittest {
 +/
 
 
-/* FIXME:
-. Add docs for before, after, and 4 different describe functions
-. Added the functions shouldHaveKey shouldNotHaveKey
-*/
-
 module BDD;
 
 
@@ -701,17 +696,18 @@ unittest {
 }
 
 /++
-The message is usually the name of the thing being tested.
+Used to describe the thing being tested. Contains many 'it' functions to
+test the thing.
 
 Params:
  describe_message = The thing that is being described.
- tests = All the 'it' delegate functions that will test the thing.
+ its = All the 'it' functions that will test the thing.
 
 Examples:
 ----
 	describe("example_library#thing_to_test",
 		it("Should NOT fail", delegate() {
-			// code here
+			// test code here
 		})
 	);
 ----
@@ -721,21 +717,84 @@ void describe(string describe_message, ItFunc[] its ...) {
 }
 
 /++
-FIXME
+Used to describe the thing being tested. Contains many 'it' functions to
+test the thing. Also takes a function to run before each test.
+
+Params:
+ describe_message = The thing that is being described.
+ before = The function that will run before each 'it' function. If the before
+function fails, the 'it' function will not be run.
+ its = All the 'it' functions that will test the thing.
+
+Examples:
+----
+	describe("example_library#thing_to_test",
+		before(delegate() {
+			// setup code here
+		}),
+		it("Should NOT fail", delegate() {
+			// test code here
+		})
+	);
+----
 +/
 void describe(string describe_message, BeforeFunc before, ItFunc[] its ...) {
 	describe(describe_message, before, AfterFunc.init, its);
 }
 
 /++
-FIXME
+Used to describe the thing being tested. Contains many 'it' functions to
+test the thing. Also takes a function to run after each test.
+
+Params:
+ describe_message = The thing that is being described.
+ after = The function that will run after each 'it' function. Will alwasy run,
+even if the 'before' or 'it' function failed.
+ its = All the 'it' functions that will test the thing.
+
+Examples:
+----
+	describe("example_library#thing_to_test",
+		after(delegate() {
+			// tear down code here
+		}),
+		it("Should NOT fail", delegate() {
+			// test code here
+		})
+	);
+----
 +/
 void describe(string describe_message, AfterFunc after, ItFunc[] its ...) {
 	describe(describe_message, BeforeFunc.init, after, its);
 }
 
 /++
-FIXME
+Used to describe the thing being tested. Contains many 'it' functions to
+test the thing. Also takes a function to run before, and a function to
+run after each test.
+
+Params:
+ describe_message = The thing that is being described.
+ before = The function that will run before each 'it' function. If the before
+function fails, the 'it' function will not be run.
+ after = The function that will run after each 'it' function. Will alwasy run,
+even if the 'before' or 'it' function failed.
+ its = All the 'it' functions that will test the thing.
+
+Examples:
+----
+	describe("example_library#thing_to_test",
+		before(delegate() {
+			// setup code here
+		}),
+		after(delegate() {
+			// tear down code here
+		}),
+		it("Should NOT fail", delegate() {
+			// test code here
+		})
+	);
+----
 +/
 void describe(string describe_message, BeforeFunc before, AfterFunc after, ItFunc[] its ...) {
 	foreach (ItFunc it; its) {
@@ -849,7 +908,23 @@ unittest {
 }
 
 /++
-FIXME
+The function to call before each 'it' function.
+
+Params:
+ func = The function to call before running each test.
+
+Examples:
+----
+int a = 4;
+describe("example_library#a",
+	before(delegate() {
+		a.shouldEqual(4);
+	}),
+	it("Should test more things", delegate() {
+		//
+	})
+);
+----
 +/
 BeforeFunc before(void delegate() func) {
 	BeforeFunc retval;
@@ -910,7 +985,23 @@ unittest {
 }
 
 /++
-FIXME
+The function to call after each 'it' function.
+
+Params:
+ func = The function to call after running each test.
+
+Examples:
+----
+int a = 4;
+describe("example_library#a",
+	after(delegate() {
+		a.shouldEqual(4);
+	}),
+	it("Should test more things", delegate() {
+		//
+	})
+);
+----
 +/
 AfterFunc after(void delegate() func) {
 	AfterFunc retval;
