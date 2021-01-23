@@ -701,26 +701,30 @@ unittest {
 }
 
 /++
+The message is usually the name of the thing being tested.
+
+Params:
+ describe_message = The thing that is being described.
+ tests = All the 'it' delegate functions that will test the thing.
+
+Examples:
+----
+	describe("example_library#thing_to_test",
+		it("Should NOT fail", delegate() {
+			// code here
+		})
+	);
+----
++/
+void describe(string describe_message, ItFunc[] its ...) {
+	describe(describe_message, BeforeFunc.init, AfterFunc.init, its);
+}
+
+/++
 FIXME
 +/
 void describe(string describe_message, BeforeFunc before, ItFunc[] its ...) {
 	describe(describe_message, before, AfterFunc.init, its);
-}
-
-unittest {
-	int before_counter = 0;
-
-	describe("BDD#before",
-		before(delegate() {
-			before_counter++;
-		}),
-		it("Should call before", delegate() {
-			before_counter.shouldEqual(1);
-		}),
-		it("Should call before again", delegate() {
-			before_counter.shouldEqual(2);
-		})
-	);
 }
 
 /++
@@ -728,22 +732,6 @@ FIXME
 +/
 void describe(string describe_message, AfterFunc after, ItFunc[] its ...) {
 	describe(describe_message, BeforeFunc.init, after, its);
-}
-
-unittest {
-	int after_counter = 0;
-
-	describe("BDD#after",
-		after(delegate() {
-			after_counter++;
-		}),
-		it("Should call after", delegate() {
-			after_counter.shouldEqual(0);
-		}),
-		it("Should call after again", delegate() {
-			after_counter.shouldEqual(1);
-		})
-	);
 }
 
 /++
@@ -783,24 +771,105 @@ void describe(string describe_message, BeforeFunc before, AfterFunc after, ItFun
 	}
 }
 
+/++
+The message should describe what the test should do.
+
+Params:
+ message = The message to print when the test fails.
+ func = The delegate to call when running the test.
+
+Examples:
+----
+int a = 4;
+describe("example_library#a",
+	it("Should equal 4", delegate() {
+		a.shouldEqual(4);
+	}),
+	it("Should Not equal 5", delegate() {
+		a.shouldNotEqual(5);
+	})
+);
+----
++/
+ItFunc it(string message, void delegate() func) {
+	ItFunc retval;
+	retval.it_message = message;
+	retval.func = func;
+
+	return retval;
+}
+
+unittest {
+	int counter = 0;
+
+	describe("BDD#it",
+		it("Should inc counter", delegate() {
+			counter++;
+		}),
+		it("Should inc counter again", delegate() {
+			counter++;
+		})
+	);
+
+	counter.shouldEqual(2);
+}
+
+// Should call everything, even if it throws
+unittest {
+	int counter = 0;
+
+	startSavingExceptions();
+
+	describe("BDD#it_throw",
+		// Should run
+		before(delegate() {
+			counter++;
+		}),
+		// Should run
+		after(delegate() {
+			counter++;
+		}),
+		// Should run
+		it("Should throw", delegate() {
+			counter++;
+			throw new Exception("It function is throwing!");
+		}),
+		it("Should throw again", delegate() {
+			counter++;
+			throw new Exception("Other it function is throwing!");
+		}),
+	);
+
+	counter.shouldEqual(6);
+	_saved_exceptions.length.shouldEqual(2);
+	_saved_exceptions[0].msg.shouldEqual("It function is throwing!");
+	_saved_exceptions[1].msg.shouldEqual("Other it function is throwing!");
+
+	stopSavingExceptions();
+}
+
+/++
+FIXME
++/
+BeforeFunc before(void delegate() func) {
+	BeforeFunc retval;
+	retval.func = func;
+
+	return retval;
+}
+
 unittest {
 	int before_counter = 0;
-	int after_counter = 0;
 
-	describe("BDD#before_and_after",
+	describe("BDD#before",
 		before(delegate() {
 			before_counter++;
 		}),
-		after(delegate() {
-			after_counter++;
-		}),
-		it("Should call after", delegate() {
+		it("Should call before", delegate() {
 			before_counter.shouldEqual(1);
-			after_counter.shouldEqual(0);
 		}),
-		it("Should call after again", delegate() {
+		it("Should call before again", delegate() {
 			before_counter.shouldEqual(2);
-			after_counter.shouldEqual(1);
 		})
 	);
 }
@@ -840,6 +909,32 @@ unittest {
 	stopSavingExceptions();
 }
 
+/++
+FIXME
++/
+AfterFunc after(void delegate() func) {
+	AfterFunc retval;
+	retval.func = func;
+
+	return retval;
+}
+
+unittest {
+	int after_counter = 0;
+
+	describe("BDD#after",
+		after(delegate() {
+			after_counter++;
+		}),
+		it("Should call after", delegate() {
+			after_counter.shouldEqual(0);
+		}),
+		it("Should call after again", delegate() {
+			after_counter.shouldEqual(1);
+		})
+	);
+}
+
 // Should call everything, even if after throws
 unittest {
 	int counter = 0;
@@ -875,101 +970,26 @@ unittest {
 	stopSavingExceptions();
 }
 
-// Should call everything, even if it throws
 unittest {
-	int counter = 0;
+	int before_counter = 0;
+	int after_counter = 0;
 
-	startSavingExceptions();
-
-	describe("BDD#it_throw",
-		// Should run
+	describe("BDD#before_and_after",
 		before(delegate() {
-			counter++;
+			before_counter++;
 		}),
-		// Should run
 		after(delegate() {
-			counter++;
+			after_counter++;
 		}),
-		// Should run
-		it("Should throw", delegate() {
-			counter++;
-			throw new Exception("It function is throwing!");
+		it("Should call after", delegate() {
+			before_counter.shouldEqual(1);
+			after_counter.shouldEqual(0);
 		}),
-		it("Should throw again", delegate() {
-			counter++;
-			throw new Exception("Other it function is throwing!");
-		}),
-	);
-
-	counter.shouldEqual(6);
-	_saved_exceptions.length.shouldEqual(2);
-	_saved_exceptions[0].msg.shouldEqual("It function is throwing!");
-	_saved_exceptions[1].msg.shouldEqual("Other it function is throwing!");
-
-	stopSavingExceptions();
-}
-
-/++
-The message is usually the name of the thing being tested.
-
-Params:
- describe_message = The thing that is being described.
- tests = All the 'it' delegate functions that will test the thing.
-
-Examples:
-----
-	describe("example_library#thing_to_test",
-		it("Should NOT fail", delegate() {
-			// code here
+		it("Should call after again", delegate() {
+			before_counter.shouldEqual(2);
+			after_counter.shouldEqual(1);
 		})
 	);
-----
-+/
-void describe(string describe_message, ItFunc[] its ...) {
-	describe(describe_message, BeforeFunc.init, AfterFunc.init, its);
-}
-
-
-/++
-The message should describe what the test should do.
-
-Params:
- message = The message to print when the test fails.
- func = The delegate to call when running the test.
-
-Examples:
-----
-int a = 4;
-describe("example_library#a",
-	it("Should equal 4", delegate() {
-		a.shouldEqual(4);
-	}),
-	it("Should Not equal 5", delegate() {
-		a.shouldNotEqual(5);
-	})
-);
-----
-+/
-ItFunc it(string message, void delegate() func) {
-	ItFunc retval;
-	retval.it_message = message;
-	retval.func = func;
-
-	return retval;
-}
-
-BeforeFunc before(void delegate() func) {
-	BeforeFunc retval;
-	retval.func = func;
-
-	return retval;
-}
-
-AfterFunc after(void delegate() func) {
-	AfterFunc retval;
-	retval.func = func;
-
-	return retval;
 }
 
 private:
