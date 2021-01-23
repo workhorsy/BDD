@@ -1,10 +1,10 @@
 // Copyright (c) 2017-2021 Matthew Brennan Jones <matthew.brennan.jones@gmail.com>
 // Boost Software License - Version 1.0
-// Behavior Driven Development for the D programming language
+// Behavior Driven Development testing framework for the D programming language
 // https://github.com/workhorsy/BDD
 
 /++
-Behavior Driven Development for the D programming language
+Behavior Driven Development testing framework for the D programming language
 
 Home page:
 $(LINK https://github.com/workhorsy/BDD)

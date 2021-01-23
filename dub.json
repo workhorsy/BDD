@@ -1,6 +1,6 @@
 {
 	"name": "bdd",
-	"description": "Behavior Driven Development for the D programming language",
+	"description": "Behavior Driven Development testing framework for the D programming language",
 	"authors": [
 		"Matthew Brennan Jones <matthew.brennan.jones@gmail.com>"
 	],

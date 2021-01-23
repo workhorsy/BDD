@@ -1,5 +1,5 @@
 # BDD
-Behavior Driven Development for the D programming language
+Behavior Driven Development testing framework for the D programming language
 
 # Documentation
 
