@@ -128,9 +128,9 @@ unittest {
 			"abc".shouldEqual("abc");
 		}),
 		it("Should fail when NOT equal", delegate() {
-			shouldThrow(delegate() {
+			shouldThrow("<abc> expected to equal <xyz>.", delegate() {
 				"abc".shouldEqual("xyz");
-			}, "<abc> expected to equal <xyz>.");
+			});
 		})
 	);
 }
@@ -176,9 +176,9 @@ unittest {
 			"abc".shouldNotEqual("xyz");
 		}),
 		it("Should fail when equal", delegate() {
-			shouldThrow(delegate() {
+			shouldThrow("<abc> expected to NOT equal <abc>.", delegate() {
 				"abc".shouldNotEqual("abc");
-			}, "<abc> expected to NOT equal <abc>.");
+			});
 		})
 	);
 }
@@ -223,10 +223,10 @@ unittest {
 			value.shouldBeNull();
 		}),
 		it("Should fail when it is NOT null", delegate() {
-			shouldThrow(delegate() {
+			shouldThrow("expected to be <null>.", delegate() {
 				string value = "abc";
 				value.shouldBeNull();
-			}, "expected to be <null>.");
+			});
 		})
 	);
 }
@@ -267,10 +267,10 @@ unittest {
 			"abc".shouldNotBeNull();
 		}),
 		it("Should fail when it is null", delegate() {
-			shouldThrow(delegate() {
+			shouldThrow("expected to NOT be <null>.", delegate() {
 				string value = null;
 				value.shouldNotBeNull();
-			}, "expected to NOT be <null>.");
+			});
 		})
 	);
 }
@@ -320,9 +320,9 @@ unittest {
 			"abc".shouldBeIn(["abc", "xyz"]);
 		}),
 		it("Should fail when the string is NOT in the array", delegate() {
-			shouldThrow(delegate() {
+			shouldThrow("<qed> is not in <[abc, xyz]>.", delegate() {
 				"qed".shouldBeIn(["abc", "xyz"]);
-			}, "<qed> is not in <[abc, xyz]>.");
+			});
 		})
 	);
 }
@@ -372,9 +372,9 @@ unittest {
 			"xxx".shouldNotBeIn(["abc", "xyz"]);
 		}),
 		it("Should fail when the string is in the array", delegate() {
-			shouldThrow(delegate() {
+			shouldThrow("<abc> is in <[abc, xyz]>.", delegate() {
 				"abc".shouldNotBeIn(["abc", "xyz"]);
-			}, "<abc> is in <[abc, xyz]>.");
+			});
 		})
 	);
 }
@@ -419,9 +419,9 @@ unittest {
 			10.shouldBeGreater(5);
 		}),
 		it("Should fail when one is NOT greater", delegate() {
-			shouldThrow(delegate() {
+			shouldThrow("<5> expected to be greater than <10>.", delegate() {
 				5.shouldBeGreater(10);
-			}, "<5> expected to be greater than <10>.");
+			});
 		})
 	);
 }
@@ -466,9 +466,9 @@ unittest {
 			5.shouldBeLess(10);
 		}),
 		it("Should fail when one is NOT less", delegate() {
-			shouldThrow(delegate() {
+			shouldThrow("<10> expected to be less than <5>.", delegate() {
 				10.shouldBeLess(5);
-			}, "<10> expected to be less than <5>.");
+			});
 		})
 	);
 }
@@ -516,9 +516,9 @@ unittest {
 			10.shouldBeGreaterOrEqual(10);
 		}),
 		it("Should fail when one is less", delegate() {
-			shouldThrow(delegate() {
+			shouldThrow("<5> expected to be greater or equal to <10>.", delegate() {
 				5.shouldBeGreaterOrEqual(10);
-			}, "<5> expected to be greater or equal to <10>.");
+			});
 		})
 	);
 }
@@ -566,11 +566,39 @@ unittest {
 			10.shouldBeLessOrEqual(10);
 		}),
 		it("Should fail when one is less", delegate() {
-			shouldThrow(delegate() {
+			shouldThrow("<10> expected to be less or equal to <5>.", delegate() {
 				10.shouldBeLessOrEqual(5);
-			}, "<10> expected to be less or equal to <5>.");
+			});
 		})
 	);
+}
+
+/++
+Used for asserting that a delegate will throw an exception.
+
+Params:
+ cb = The delegate that is expected to throw the exception.
+ file = The file name that the assert failed in. Should be left as default.
+ line = The file line that the assert failed in. Should be left as default.
+
+Throws:
+ If delegate does NOT throw, will throw an AssertError.
+
+Examples:
+----
+// Makes sure it throws, but does not check the message
+shouldThrow(delegate() {
+	throw new Exception("boom!");
+});
+
+// Will throw an exception like "AssertError@test/example.d(7): Exception was not thrown. Expected one.
+shouldThrow(delegate() {
+
+});
+----
++/
+void shouldThrow(void delegate() cb, string file=__FILE__, size_t line=__LINE__) {
+	shouldThrow(null, cb, file, line);
 }
 
 /++
@@ -589,27 +617,17 @@ Throws:
 Examples:
 ----
 // Makes sure it throws with the message "boom!"
-shouldThrow(delegate() {
-	throw new Exception("boom!");
-}, "boom!");
-
-// Makes sure it throws, but does not check the message
-shouldThrow(delegate() {
+shouldThrow("boom!", delegate() {
 	throw new Exception("boom!");
 });
 
 // Will throw an exception like "AssertError@test/example.d(7): Exception was not thrown. Expected: boom!"
-shouldThrow(delegate() {
-
-}, "boom!");
-
-// Will throw an exception like "AssertError@test/example.d(7): Exception was not thrown. Expected one.
-shouldThrow(delegate() {
+shouldThrow("boom!", delegate() {
 
 });
 ----
 +/
-void shouldThrow(void delegate() cb, string message=null, string file=__FILE__, size_t line=__LINE__) {
+void shouldThrow(string message, void delegate() cb, string file=__FILE__, size_t line=__LINE__) {
 	import core.exception : AssertError;
 	import std.string : format;
 
@@ -647,19 +665,19 @@ unittest {
 		it("Should succeed when a named exception is thrown", delegate() {
 			bool has_thrown = false;
 
-			shouldThrow(delegate() {
+			shouldThrow("smack!", delegate() {
 				has_thrown = true;
 				throw new Exception("smack!");
-			}, "smack!");
+			});
 
 			has_thrown.shouldEqual(true);
 		}),
 		it("Should fail when a wrongly named exception is thrown", delegate() {
 			Throwable ex = null;
 			try {
-				shouldThrow(delegate() {
+				shouldThrow("Yeeeeeeeeeeesssss!", () {
 					throw new Exception("Nooooooo!");
-				}, "Yeeeeeeeeeeesssss!");
+				});
 			} catch (Throwable exception) {
 				ex = exception;
 			}
@@ -683,9 +701,9 @@ unittest {
 		it("Should fail when a named exception is not thrown", delegate() {
 			Throwable ex = null;
 			try {
-				shouldThrow(delegate() {
+				shouldThrow("kapow!", delegate() {
 					// Does not throw
-				}, "kapow!");
+				});
 			} catch (Throwable exception) {
 				ex = exception;
 			}
