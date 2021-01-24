@@ -64,19 +64,19 @@ shared static this() {
 		modules = modules.filter!(m => m && m.unitTest).array();
 
 		// Run all the tests
-		foreach (m; modules) {
-//			stdout.writefln("test module: %s", m.name); stdout.flush();
-			m.unitTest()();
+		foreach (mod; modules) {
+//			stdout.writefln("test module: %s", mod.name); stdout.flush();
+			mod.unitTest()();
 		}
 
 		// Print the results
 		stdout.writeln("Unit Test Results:"); stdout.flush();
 		stdout.writefln("%d total, %d successful, %d failed", _success_count + _fail_count, _success_count, _fail_count); stdout.flush();
 
-		foreach (a, b; _fail_messages) {
-			stdout.writefln("%s", a); stdout.flush();
-			foreach (c; b) {
-				stdout.writefln("- %s", c); stdout.flush();
+		foreach (describe_message, errors; _fail_messages) {
+			stdout.writefln("%s", describe_message); stdout.flush();
+			foreach (error; errors) {
+				stdout.writefln("%s", error); stdout.flush();
 			}
 		}
 
@@ -807,7 +807,7 @@ void describe(string describe_message, BeforeFunc before, AfterFunc after, ItFun
 			}
 		} catch (Throwable ex) {
 			before_threw = true;
-			addFail(describe_message, it, ex);
+			addFail(describe_message, before, ex);
 		}
 
 		// Run it function
@@ -826,7 +826,7 @@ void describe(string describe_message, BeforeFunc before, AfterFunc after, ItFun
 				after.func();
 			}
 		} catch (Throwable ex) {
-			addFail(describe_message, it, ex);
+			addFail(describe_message, after, ex);
 		}
 	}
 }
@@ -837,6 +837,8 @@ The message should describe what the test should do.
 Params:
  message = The message to print when the test fails.
  func = The delegate to call when running the test.
+ file = The file name that the 'it' is located in. Should be left as default.
+ line = The file line that the 'it' is located at. Should be left as default.
 
 Examples:
 ----
@@ -851,10 +853,12 @@ describe("example_library#a",
 );
 ----
 +/
-ItFunc it(string message, void delegate() func) {
+ItFunc it(string message, void delegate() func, string file=__FILE__, size_t line=__LINE__) {
 	ItFunc retval;
 	retval.it_message = message;
 	retval.func = func;
+	retval.file = file;
+	retval.line = line;
 
 	return retval;
 }
@@ -913,6 +917,8 @@ The function to call before each 'it' function.
 
 Params:
  func = The function to call before running each test.
+ file = The file name that the 'before' is located in. Should be left as default.
+ line = The file line that the 'before' is located at. Should be left as default.
 
 Examples:
 ----
@@ -927,9 +933,11 @@ describe("example_library#a",
 );
 ----
 +/
-BeforeFunc before(void delegate() func) {
+BeforeFunc before(void delegate() func, string file=__FILE__, size_t line=__LINE__) {
 	BeforeFunc retval;
 	retval.func = func;
+	retval.file = file;
+	retval.line = line;
 
 	return retval;
 }
@@ -990,6 +998,8 @@ The function to call after each 'it' function.
 
 Params:
  func = The function to call after running each test.
+ file = The file name that the 'after' is located in. Should be left as default.
+ line = The file line that the 'after' is located at. Should be left as default.
 
 Examples:
 ----
@@ -1004,9 +1014,11 @@ describe("example_library#a",
 );
 ----
 +/
-AfterFunc after(void delegate() func) {
+AfterFunc after(void delegate() func, string file=__FILE__, size_t line=__LINE__) {
 	AfterFunc retval;
 	retval.func = func;
+	retval.file = file;
+	retval.line = line;
 
 	return retval;
 }
@@ -1088,30 +1100,60 @@ private:
 
 struct BeforeFunc {
 	void delegate() func;
+	string file;
+	size_t line;
 }
 
 struct AfterFunc {
 	void delegate() func;
+	string file;
+	size_t line;
 }
 
 struct ItFunc {
 	string it_message;
 	void delegate() func;
+	string file;
+	size_t line;
 }
 
 void addSuccess() {
 	_success_count++;
 }
 
-void addFail(string describe_message, ItFunc it, Throwable err) {
-	import std.string : format;
+void addFail(M, F, E)(M describe_message, F func, E err)
+	if (is(M == string) &&
+	is(F == ItFunc) || is(F == BeforeFunc) || is(F == AfterFunc) &&
+	is(E == Throwable)) {
 
+	import std.string : split, format;
+	import std.array : replace;
+	import std.conv : to;
+
+	// Just save the exception if desired
 	if (_save_exceptions) {
 		_saved_exceptions ~= err;
-	} else {
-		_fail_messages[describe_message] ~= `"%s: %s" %s(%s)`.format(it.it_message, err.msg, err.file, err.line);
-		_fail_count++;
+		return;
 	}
+
+	// Get the message, file, and line of the func
+	string it_message = "Unknown";
+	static if (is(F == ItFunc)) {
+		it_message = "    - \"%s\" %s(%s)".format(func.it_message, func.file, func.line);
+	} else static if (is(F == BeforeFunc)) {
+		it_message = "    - \"before()\" %s(%s)".format(func.file, func.line);
+	} else static if (is(F == AfterFunc)) {
+		it_message = "    - \"after()\" %s(%s)".format(func.file, func.line);
+	} else {
+		static assert(0, `Unexpected op "%s"`.format(F.stringof));
+	}
+
+	// Get the stack trace
+	string stack_trace = "        %s".format(err.to!string.replace("\n", "\n        "));
+
+	string message = "%s\n%s".format(it_message, stack_trace);
+	_fail_messages[describe_message] ~= message;
+	_fail_count++;
 }
 
 void startSavingExceptions() {
