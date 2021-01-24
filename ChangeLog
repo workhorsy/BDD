@@ -1,5 +1,5 @@
 
-* Release 3.0.0
+01/23/2021 Release 3.0.0
 	* Fixed Bug #9: Move shouldThrow message parameter before function parameter
 	* Fixed Bug #2: Should print stack traces too
 	* Fixed Bug #7: shouldThrow should show the expected message on failure

@@ -3,7 +3,7 @@ Behavior Driven Development testing framework for the D programming language
 
 # Documentation
 
-[https://workhorsy.github.io/BDD/2.0.0/](https://workhorsy.github.io/BDD/2.0.0/)
+[https://workhorsy.github.io/BDD/3.0.0/](https://workhorsy.github.io/BDD/3.0.0/)
 
 # Generate documentation
 
