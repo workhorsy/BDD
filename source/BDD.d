@@ -297,7 +297,9 @@ Examples:
 void shouldBeIn(T, U)(T value, U[] valid_values, string file=__FILE__, size_t line=__LINE__) {
 	import std.string : format;
 	import std.array : replace, join;
+	import std.algorithm : map;
 	import core.exception : AssertError;
+	import std.conv : to;
 
 	bool is_valid = false;
 
@@ -308,7 +310,7 @@ void shouldBeIn(T, U)(T value, U[] valid_values, string file=__FILE__, size_t li
 	}
 
 	if (! is_valid) {
-		string message = "<%s> is not in <[%s]>.".format(value, valid_values.join(", "));
+		string message = "<%s> is not in <[%s]>.".format(value, valid_values.map!(n => n.to!string).join(", "));
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new AssertError(message, file, line);
 	}
@@ -318,6 +320,7 @@ unittest {
 	describe("BDD#shouldBeIn",
 		it("Should succeed when the string is in the array", delegate() {
 			"abc".shouldBeIn(["abc", "xyz"]);
+			2.shouldBeIn([1, 2, 3]);
 		}),
 		it("Should fail when the string is NOT in the array", delegate() {
 			shouldThrow("<qed> is not in <[abc, xyz]>.", delegate() {
@@ -349,7 +352,9 @@ Examples:
 void shouldNotBeIn(T, U)(T value, U[] valid_values, string file=__FILE__, size_t line=__LINE__) {
 	import std.string : format;
 	import std.array : replace, join;
+	import std.algorithm : map;
 	import core.exception : AssertError;
+	import std.conv : to;
 
 	bool is_valid = true;
 
@@ -360,7 +365,7 @@ void shouldNotBeIn(T, U)(T value, U[] valid_values, string file=__FILE__, size_t
 	}
 
 	if (! is_valid) {
-		string message = "<%s> is in <[%s]>.".format(value, valid_values.join(", "));
+		string message = "<%s> is in <[%s]>.".format(value, valid_values.map!(n => n.to!string).join(", "));
 		message = message.replace("\r", "\\r").replace("\n", "\\n");
 		throw new AssertError(message, file, line);
 	}
@@ -370,6 +375,7 @@ unittest {
 	describe("BDD#shouldNotBeIn",
 		it("Should succeed when the string is NOT in the array", delegate() {
 			"xxx".shouldNotBeIn(["abc", "xyz"]);
+			7.shouldNotBeIn([1, 2, 3]);
 		}),
 		it("Should fail when the string is in the array", delegate() {
 			shouldThrow("<abc> is in <[abc, xyz]>.", delegate() {
