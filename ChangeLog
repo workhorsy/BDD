@@ -1,5 +1,5 @@
 
-* Release 3.1.0
+01/24/2021 Release 3.1.0
 	* Fixed Bug #15: shouldBeIn and shouldNotBeIn fail with non string types
 
 01/23/2021 Release 3.0.0

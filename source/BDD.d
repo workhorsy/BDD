@@ -9,7 +9,7 @@ Behavior Driven Development testing framework for the D programming language
 Home page:
 $(LINK https://github.com/workhorsy/BDD)
 
-Version: 3.0.0
+Version: 3.1.0
 
 License:
 Boost Software License - Version 1.0
