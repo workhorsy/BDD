@@ -1195,8 +1195,3 @@ Throwable[] _saved_exceptions;
 string[][string] _fail_messages;
 ulong _fail_count;
 ulong _success_count;
-
-/*
-	TODO:
-	* Make indentation in docs use 4 space sized tabs
-*/
