@@ -69,16 +69,16 @@ shared static this() {
 			mod.unitTest()();
 		}
 
-		// Print the results
-		stdout.writeln("Unit Test Results:"); stdout.flush();
-		stdout.writefln("%d total, %d successful, %d failed", _success_count + _fail_count, _success_count, _fail_count); stdout.flush();
-
 		foreach (describe_message, errors; _fail_messages) {
 			stdout.writefln("%s", describe_message); stdout.flush();
 			foreach (error; errors) {
 				stdout.writefln("%s", error); stdout.flush();
 			}
 		}
+
+		// Print the results
+		stdout.writeln("Unit Test Results:"); stdout.flush();
+		stdout.writefln("%d total, %d successful, %d failed", _success_count + _fail_count, _success_count, _fail_count); stdout.flush();
 
 		// Return result
 		bool did_succeed = _fail_count <= 0;
