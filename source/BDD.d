@@ -46,6 +46,26 @@ unittest {
 module BDD;
 
 
+import core.exception : AssertError;
+
+class ShouldAssertError : AssertError {
+	string _details;
+
+	this(string message=null, string details=null, string file=__FILE__, size_t line=__LINE__) {
+		super(message, file, line);
+		_details = details;
+	}
+
+	override string toString() {
+		string retval = "";
+		if (_details) {
+			retval ~= _details ~ "\n";
+		}
+		retval ~= super.toString();
+		return retval;
+	}
+}
+
 // Runs all the modules unit tests
 shared static this() {
 	import core.runtime : Runtime;
@@ -1166,7 +1186,13 @@ void addFail(M, F, E)(M describe_message, F func, E err)
 	}
 
 	// Get the stack trace
-	string stack_trace = "        %s".format(err.to!string.replace("\n", "\n        "));
+	string stack_trace = "";
+	if (auto should_err = cast(ShouldAssertError) err) {
+		stack_trace ~= should_err.to!string;
+	} else {
+		stack_trace ~= err.to!string;
+	}
+	stack_trace = "        %s".format(stack_trace.replace("\n", "\n        "));
 
 	string message = "%s\n%s".format(it_message, stack_trace);
 	_fail_messages[describe_message] ~= message;
