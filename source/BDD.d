@@ -110,14 +110,13 @@ z.shouldEqual(5);
 +/
 void shouldEqual(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	import std.string : format;
-	import std.array : replace;
 	import core.exception : AssertError;
 
 	if (a != b) {
 		if (! message) {
 			message = "<%s> expected to equal <%s>.".format(a, b);
 		}
-		message = message.replace("\r", "\\r").replace("\n", "\\n");
+		message = escapeASCII(message);
 		throw new AssertError(message, file, line);
 	}
 }
@@ -158,14 +157,13 @@ z.shouldNotEqual(3);
 +/
 void shouldNotEqual(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	import std.string : format;
-	import std.array : replace;
 	import core.exception : AssertError;
 
 	if (a == b) {
 		if (! message) {
 			message = "<%s> expected to NOT equal <%s>.".format(a, b);
 		}
-		message = message.replace("\r", "\\r").replace("\n", "\\n");
+		message = escapeASCII(message);
 		throw new AssertError(message, file, line);
 	}
 }
@@ -204,14 +202,13 @@ z.shouldBeNull();
 +/
 void shouldBeNull(T)(T a, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	import std.string : format;
-	import std.array : replace;
 	import core.exception : AssertError;
 
 	if (a !is null) {
 		if (! message) {
 			message = "expected to be <null>.";
 		}
-		message = message.replace("\r", "\\r").replace("\n", "\\n");
+		message = escapeASCII(message);
 		throw new AssertError(message, file, line);
 	}
 }
@@ -296,7 +293,7 @@ Examples:
 +/
 void shouldBeIn(T, U)(T value, U[] valid_values, string file=__FILE__, size_t line=__LINE__) {
 	import std.string : format;
-	import std.array : replace, join;
+	import std.array : join;
 	import std.algorithm : map;
 	import core.exception : AssertError;
 	import std.conv : to;
@@ -311,7 +308,7 @@ void shouldBeIn(T, U)(T value, U[] valid_values, string file=__FILE__, size_t li
 
 	if (! is_valid) {
 		string message = "<%s> is not in <[%s]>.".format(value, valid_values.map!(n => n.to!string).join(", "));
-		message = message.replace("\r", "\\r").replace("\n", "\\n");
+		message = escapeASCII(message);
 		throw new AssertError(message, file, line);
 	}
 }
@@ -351,7 +348,7 @@ Examples:
 +/
 void shouldNotBeIn(T, U)(T value, U[] valid_values, string file=__FILE__, size_t line=__LINE__) {
 	import std.string : format;
-	import std.array : replace, join;
+	import std.array : join;
 	import std.algorithm : map;
 	import core.exception : AssertError;
 	import std.conv : to;
@@ -366,7 +363,7 @@ void shouldNotBeIn(T, U)(T value, U[] valid_values, string file=__FILE__, size_t
 
 	if (! is_valid) {
 		string message = "<%s> is in <[%s]>.".format(value, valid_values.map!(n => n.to!string).join(", "));
-		message = message.replace("\r", "\\r").replace("\n", "\\n");
+		message = escapeASCII(message);
 		throw new AssertError(message, file, line);
 	}
 }
@@ -407,14 +404,13 @@ Examples:
 +/
 void shouldBeGreater(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	import std.string : format;
-	import std.array : replace;
 	import core.exception : AssertError;
 
 	if (a <= b) {
 		if (! message) {
 			message = "<%s> expected to be greater than <%s>.".format(a, b);
 		}
-		message = message.replace("\r", "\\r").replace("\n", "\\n");
+		message = escapeASCII(message);
 		throw new AssertError(message, file, line);
 	}
 }
@@ -454,14 +450,13 @@ Examples:
 +/
 void shouldBeLess(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	import std.string : format;
-	import std.array : replace;
 	import core.exception : AssertError;
 
 	if (a >= b) {
 		if (! message) {
 			message = "<%s> expected to be less than <%s>.".format(a, b);
 		}
-		message = message.replace("\r", "\\r").replace("\n", "\\n");
+		message = escapeASCII(message);
 		throw new AssertError(message, file, line);
 	}
 }
@@ -501,14 +496,13 @@ Examples:
 +/
 void shouldBeGreaterOrEqual(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	import std.string : format;
-	import std.array : replace;
 	import core.exception : AssertError;
 
 	if (a < b) {
 		if (! message) {
 			message = "<%s> expected to be greater or equal to <%s>.".format(a, b);
 		}
-		message = message.replace("\r", "\\r").replace("\n", "\\n");
+		message = escapeASCII(message);
 		throw new AssertError(message, file, line);
 	}
 }
@@ -551,14 +545,13 @@ Examples:
 +/
 void shouldBeLessOrEqual(T, U)(T a, U b, string message=null, string file=__FILE__, size_t line=__LINE__) {
 	import std.string : format;
-	import std.array : replace;
 	import core.exception : AssertError;
 
 	if (a > b) {
 		if (! message) {
 			message = "<%s> expected to be less or equal to <%s>.".format(a, b);
 		}
-		message = message.replace("\r", "\\r").replace("\n", "\\n");
+		message = escapeASCII(message);
 		throw new AssertError(message, file, line);
 	}
 }
@@ -1188,6 +1181,39 @@ void startSavingExceptions() {
 void stopSavingExceptions() {
 	_saved_exceptions = [];
 	_save_exceptions = false;
+}
+
+string escapeASCII(string message) {
+	import std.string : format;
+	import std.ascii : isControl;
+	import std.array : replace;
+
+	// Replace clear rule, new line, and tab
+	message = message.replace("\r", "\\r").replace("\n", "\\n").replace("\t", "\\t");
+
+	string retval = "";
+	foreach (char n ; message) {
+		if (isControl(n)) {
+			retval ~= `\0x%x`.format(cast(int) n);
+		} else {
+			retval ~= n;
+		}
+	}
+
+	return retval;
+}
+
+unittest {
+	describe("BDD#escapeASCII",
+		it("Should escape ascii", delegate() {
+			escapeASCII("ab cd").shouldEqual("ab cd");
+			escapeASCII("ab\tcd\r\n").shouldEqual("ab\\tcd\\r\\n");
+			escapeASCII("abcd\017").shouldEqual(`abcd\0xf`);
+			escapeASCII("abcd\22").shouldEqual(`abcd\0x12`);
+			escapeASCII("abcd\2\0").shouldEqual(`abcd\0x2\0x0`);
+			escapeASCII("うぇ \022 えぉ").shouldEqual(`うぇ \0x12 えぉ`);
+		})
+	);
 }
 
 bool _save_exceptions = false;
