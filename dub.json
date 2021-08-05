@@ -21,6 +21,8 @@
 		{
 			"name": "unittest",
 			"targetName": "bdd-test",
+			"importPaths": ["source/", "test/"],
+			"sourceFiles": ["test/test.d"],
 			"dependencies": {
 			}
 		}
