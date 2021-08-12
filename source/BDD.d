@@ -49,18 +49,12 @@ module BDD;
 import core.exception : AssertError;
 
 class ShouldAssertError : AssertError {
-	string _details;
-
-	this(string message=null, string details=null, string file=__FILE__, size_t line=__LINE__) {
+	this(string message=null, string file=__FILE__, size_t line=__LINE__) {
 		super(message, file, line);
-		_details = details;
 	}
 
 	override string toString() {
 		string retval = "";
-		if (_details) {
-			retval ~= _details ~ "\n";
-		}
 		retval ~= super.toString();
 		return retval;
 	}
@@ -134,14 +128,13 @@ void shouldEqual(T, U)(T a, U b, string message=null, string file=__FILE__, size
 
 	if (a != b) {
 		if (! message) {
-			message = "Not equal";
+			message = "shouldEqual failed\nExpected:\n%s\nTo equal:\n%s".format(
+				"<%s>".format(a).escapeASCII(),
+				"<%s>".format(b).escapeASCII()
+			);
 		}
 
-		string details = "Expected:\n%s\nTo equal:\n%s".format(
-			"<%s>".format(a).escapeASCII(),
-			"<%s>".format(b).escapeASCII()
-		);
-		throw new ShouldAssertError(message, details, file, line);
+		throw new ShouldAssertError(message, file, line);
 	}
 }
 
@@ -158,8 +151,8 @@ unittest {
 				err = ex;
 			}
 			err.shouldNotBeNull();
-			err.msg.shouldEqual("Not equal");
-			err._details.shouldEqual(
+			err.msg.shouldEqual(
+				"shouldEqual failed\n" ~
 				"Expected:\n" ~
 				"<abc>\n" ~
 				"To equal:\n" ~
@@ -196,8 +189,13 @@ void shouldNotEqual(T, U)(T a, U b, string message=null, string file=__FILE__, s
 	if (a == b) {
 		if (! message) {
 			message = "<%s> expected to NOT equal <%s>.".format(a, b);
+
+			message = "shouldNotEqual failed\nExpected:\n%s\nTo NOT equal:\n%s".format(
+				"<%s>".format(a).escapeASCII(),
+				"<%s>".format(b).escapeASCII()
+			);
 		}
-		message = escapeASCII(message);
+
 		throw new AssertError(message, file, line);
 	}
 }
@@ -208,7 +206,7 @@ unittest {
 			"abc".shouldNotEqual("xyz");
 		}),
 		it("Should fail when equal", delegate() {
-			shouldThrow("<abc> expected to NOT equal <abc>.", delegate() {
+			shouldThrow("shouldNotEqual failed\nExpected:\n<abc>\nTo NOT equal:\n<abc>", delegate() {
 				"abc".shouldNotEqual("abc");
 			});
 		})
@@ -341,8 +339,10 @@ void shouldBeIn(T, U)(T value, U[] valid_values, string file=__FILE__, size_t li
 	}
 
 	if (! is_valid) {
-		string message = "<%s> is not in <[%s]>.".format(value, valid_values.map!(n => n.to!string).join(", "));
-		message = escapeASCII(message);
+		string message = "shouldBeIn failed\n<%s>\nnot in:\n<[%s]>".format(
+			"%s".format(value).escapeASCII(),
+			valid_values.map!(n => n.to!string.escapeASCII()).join(", ")
+		);
 		throw new AssertError(message, file, line);
 	}
 }
@@ -354,7 +354,7 @@ unittest {
 			2.shouldBeIn([1, 2, 3]);
 		}),
 		it("Should fail when the string is NOT in the array", delegate() {
-			shouldThrow("<qed> is not in <[abc, xyz]>.", delegate() {
+			shouldThrow("shouldBeIn failed\n<qed>\nnot in:\n<[abc, xyz]>", delegate() {
 				"qed".shouldBeIn(["abc", "xyz"]);
 			});
 		})
@@ -396,8 +396,11 @@ void shouldNotBeIn(T, U)(T value, U[] valid_values, string file=__FILE__, size_t
 	}
 
 	if (! is_valid) {
-		string message = "<%s> is in <[%s]>.".format(value, valid_values.map!(n => n.to!string).join(", "));
-		message = escapeASCII(message);
+		string message = "shouldNotBeIn failed\n<%s>\nis in:\n<[%s]>".format(
+			"%s".format(value).escapeASCII(),
+			valid_values.map!(n => n.to!string.escapeASCII()).join(", ")
+		);
+
 		throw new AssertError(message, file, line);
 	}
 }
@@ -409,7 +412,7 @@ unittest {
 			7.shouldNotBeIn([1, 2, 3]);
 		}),
 		it("Should fail when the string is in the array", delegate() {
-			shouldThrow("<abc> is in <[abc, xyz]>.", delegate() {
+			shouldThrow("shouldNotBeIn failed\n<abc>\nis in:\n<[abc, xyz]>", delegate() {
 				"abc".shouldNotBeIn(["abc", "xyz"]);
 			});
 		})
@@ -442,9 +445,12 @@ void shouldBeGreater(T, U)(T a, U b, string message=null, string file=__FILE__, 
 
 	if (a <= b) {
 		if (! message) {
-			message = "<%s> expected to be greater than <%s>.".format(a, b);
+			message = "shouldBeGreater failed\n<%s>\nExpected to be greater than:\n<%s>".format(
+				"%s".format(a).escapeASCII(),
+				"%s".format(b).escapeASCII(),
+			);
 		}
-		message = escapeASCII(message);
+
 		throw new AssertError(message, file, line);
 	}
 }
@@ -455,7 +461,7 @@ unittest {
 			10.shouldBeGreater(5);
 		}),
 		it("Should fail when one is NOT greater", delegate() {
-			shouldThrow("<5> expected to be greater than <10>.", delegate() {
+			shouldThrow("shouldBeGreater failed\n<5>\nExpected to be greater than:\n<10>", delegate() {
 				5.shouldBeGreater(10);
 			});
 		})
@@ -488,9 +494,12 @@ void shouldBeLess(T, U)(T a, U b, string message=null, string file=__FILE__, siz
 
 	if (a >= b) {
 		if (! message) {
-			message = "<%s> expected to be less than <%s>.".format(a, b);
+			message = "shouldBeLess failed\n<%s>\nExpected to be less than:\n<%s>".format(
+				"%s".format(a).escapeASCII(),
+				"%s".format(b).escapeASCII(),
+			);
 		}
-		message = escapeASCII(message);
+
 		throw new AssertError(message, file, line);
 	}
 }
@@ -501,7 +510,7 @@ unittest {
 			5.shouldBeLess(10);
 		}),
 		it("Should fail when one is NOT less", delegate() {
-			shouldThrow("<10> expected to be less than <5>.", delegate() {
+			shouldThrow("shouldBeLess failed\n<10>\nExpected to be less than:\n<5>", delegate() {
 				10.shouldBeLess(5);
 			});
 		})
@@ -534,9 +543,12 @@ void shouldBeGreaterOrEqual(T, U)(T a, U b, string message=null, string file=__F
 
 	if (a < b) {
 		if (! message) {
-			message = "<%s> expected to be greater or equal to <%s>.".format(a, b);
+			message = "shouldBeGreaterOrEqual failed\n<%s>\nExpected to be greater or equal to:\n<%s>".format(
+				"%s".format(a).escapeASCII(),
+				"%s".format(b).escapeASCII(),
+			);
 		}
-		message = escapeASCII(message);
+
 		throw new AssertError(message, file, line);
 	}
 }
@@ -550,7 +562,7 @@ unittest {
 			10.shouldBeGreaterOrEqual(10);
 		}),
 		it("Should fail when one is less", delegate() {
-			shouldThrow("<5> expected to be greater or equal to <10>.", delegate() {
+			shouldThrow("shouldBeGreaterOrEqual failed\n<5>\nExpected to be greater or equal to:\n<10>", delegate() {
 				5.shouldBeGreaterOrEqual(10);
 			});
 		})
@@ -583,9 +595,12 @@ void shouldBeLessOrEqual(T, U)(T a, U b, string message=null, string file=__FILE
 
 	if (a > b) {
 		if (! message) {
-			message = "<%s> expected to be less or equal to <%s>.".format(a, b);
+			message = "shouldBeLessOrEqual failed\n<%s>\nExpected to be less or equal to:\n<%s>".format(
+				"%s".format(a).escapeASCII(),
+				"%s".format(b).escapeASCII(),
+			);
 		}
-		message = escapeASCII(message);
+
 		throw new AssertError(message, file, line);
 	}
 }
@@ -599,7 +614,7 @@ unittest {
 			10.shouldBeLessOrEqual(10);
 		}),
 		it("Should fail when one is less", delegate() {
-			shouldThrow("<10> expected to be less or equal to <5>.", delegate() {
+			shouldThrow("shouldBeLessOrEqual failed\n<10>\nExpected to be less or equal to:\n<5>", delegate() {
 				10.shouldBeLessOrEqual(5);
 			});
 		})
@@ -670,13 +685,13 @@ void shouldThrow(string message, void delegate() cb, string file=__FILE__, size_
 	} catch (Throwable ex) {
 		has_thrown = true;
 		if (message && message != ex.msg) {
-			throw new AssertError("Exception was thrown. Expected <%s> but got <%s>".format(message, ex.msg), file, line);
+			throw new AssertError("Exception was thrown\nExpected:\n<%s>\nBut got:\n<%s>".format(message.escapeASCII(), ex.msg.escapeASCII()), file, line);
 		}
 	}
 
 	if (! has_thrown) {
 		if (message) {
-			throw new AssertError("Exception was not thrown. Expected <%s>".format(message), file, line);
+			throw new AssertError("Exception was not thrown.\nExpected:\n<%s>".format(message.escapeASCII()), file, line);
 		} else {
 			throw new AssertError("Exception was not thrown. Expected one.", file, line);
 		}
@@ -716,7 +731,7 @@ unittest {
 			}
 
 			ex.shouldNotBeNull();
-			ex.msg.shouldEqual("Exception was thrown. Expected <Yeeeeeeeeeeesssss!> but got <Nooooooo!>");
+			ex.msg.shouldEqual("Exception was thrown\nExpected:\n<Yeeeeeeeeeeesssss!>\nBut got:\n<Nooooooo!>");
 		}),
 		it("Should fail when an exception is not thrown", delegate() {
 			Throwable ex = null;
@@ -742,7 +757,7 @@ unittest {
 			}
 
 			ex.shouldNotBeNull();
-			ex.msg.shouldEqual("Exception was not thrown. Expected <kapow!>");
+			ex.msg.shouldEqual("Exception was not thrown.\nExpected:\n<kapow!>");
 		})
 	);
 }
