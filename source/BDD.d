@@ -134,10 +134,14 @@ void shouldEqual(T, U)(T a, U b, string message=null, string file=__FILE__, size
 
 	if (a != b) {
 		if (! message) {
-			message = "<%s> expected to equal <%s>.".format(a, b);
+			message = "Not equal";
 		}
-		message = escapeASCII(message);
-		throw new AssertError(message, file, line);
+
+		string details = "Expected:\n%s\nTo equal:\n%s".format(
+			"<%s>".format(a).escapeASCII(),
+			"<%s>".format(b).escapeASCII()
+		);
+		throw new ShouldAssertError(message, details, file, line);
 	}
 }
 
@@ -147,9 +151,19 @@ unittest {
 			"abc".shouldEqual("abc");
 		}),
 		it("Should fail when NOT equal", delegate() {
-			shouldThrow("<abc> expected to equal <xyz>.", delegate() {
+			ShouldAssertError err;
+			try {
 				"abc".shouldEqual("xyz");
-			});
+			} catch (ShouldAssertError ex) {
+				err = ex;
+			}
+			err.shouldNotBeNull();
+			err.msg.shouldEqual("Not equal");
+			err._details.shouldEqual(
+				"Expected:\n" ~
+				"<abc>\n" ~
+				"To equal:\n" ~
+				"<xyz>");
 		})
 	);
 }
