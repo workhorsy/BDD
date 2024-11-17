@@ -1,4 +1,7 @@
 
+* Release 4.1.0
+	* Fixed Bug #20: Update github actions to v4
+
 11/17/2024 Release 4.0.0
 	* Fixed Bug #18: Error messages should escape non display characters
 	* Fixed Bug #16: Move test totals to bottom
