@@ -1,5 +1,6 @@
 
 * Release 4.1.0
+	* Fixed Bug #22: Add GDC compiler to github action test matrix
 	* Fixed Bug #20: Update github actions to v4
 
 11/17/2024 Release 4.0.0
